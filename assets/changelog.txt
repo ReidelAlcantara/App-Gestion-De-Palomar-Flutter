@@ -1,0 +1,27 @@
+v0.8.0-beta
+- Manual de usuario integrado accesible desde Configuración.
+- Sección 'Acerca de' con versión y desarrollador.
+- Actualización de la versión a 0.8.0-beta en toda la app.
+- Mejoras en la pantalla de Configuración y acciones.
+- Enlaces directos a grupos de comunidad (WhatsApp y Telegram).
+- Correcciones menores y optimización general.
+
+v0.1.0
+- Primer prototipo funcional: gestión básica de palomas, finanzas, reproducción, capturas, competencias y tratamientos.
+
+v0.2.0
+- Estadísticas iniciales y reportes básicos.
+- Mejoras en la navegación y estructura de módulos.
+
+v0.3.0
+- Backup y exportación de datos (JSON).
+- Personalización de tema y colores.
+
+v0.4.0
+- Gráficos interactivos en estadísticas.
+- Filtros avanzados y visualización mejorada.
+
+v0.5.0
+- Configuración granular de notificaciones.
+- Mejoras de accesibilidad y UX.
+- Corrección de errores y optimizaciones. 
