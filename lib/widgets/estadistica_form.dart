@@ -22,7 +22,6 @@ class _EstadisticaFormState extends State<EstadisticaForm> {
   final _descripcionController = TextEditingController();
 
   String _selectedTipo = 'palomas';
-  final List<String> _selectedTipos = ['palomas'];
   bool _isLoading = false;
 
   final List<String> _tiposDisponibles = [

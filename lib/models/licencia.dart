@@ -1,5 +1,3 @@
-import 'dart:convert';
-
 class Licencia {
   final String id;
   final String codigo;

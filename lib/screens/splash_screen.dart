@@ -47,6 +47,16 @@ class _SplashScreenState extends State<SplashScreen> {
                   fontSize: 18,
                 ),
               ),
+              const SizedBox(height: 40),
+              // Animación de aro giratorio
+              const SizedBox(
+                width: 60,
+                height: 60,
+                child: CircularProgressIndicator(
+                  strokeWidth: 6,
+                  valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
+                ),
+              ),
             ],
           ),
         ),

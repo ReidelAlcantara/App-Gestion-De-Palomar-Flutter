@@ -430,7 +430,7 @@ class _ReproduccionScreenState extends State<ReproduccionScreen>
   Widget _buildReproduccionesActivas() {
     return Consumer<ReproduccionProvider>(
       builder: (context, reproduccionProvider, child) {
-        final reproduccionesActivas = reproduccionProvider.reproduccionesActivas;
+        final reproduccionesActivas = reproduccionProvider.reproducciones.where((r) => r.estado == 'Activa').toList();
         if (reproduccionesActivas.isEmpty) {
           return Center(
             child: Text('No hay reproducciones activas'),
@@ -482,7 +482,7 @@ class _ReproduccionScreenState extends State<ReproduccionScreen>
   Widget _buildReproduccionesHistorial({String? searchQuery, String? estado}) {
     return Consumer<ReproduccionProvider>(
       builder: (context, reproduccionProvider, child) {
-        final reproduccionesFinalizadas = reproduccionProvider.reproduccionesFinalizadas;
+        final reproduccionesFinalizadas = reproduccionProvider.reproducciones.where((r) => r.estado == 'Finalizada').toList();
         if (reproduccionesFinalizadas.isEmpty) {
           return Center(
             child: Text('No hay reproducciones finalizadas'),

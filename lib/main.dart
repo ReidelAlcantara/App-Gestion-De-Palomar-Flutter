@@ -28,49 +28,48 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'dart:async';
 import 'dart:io';
 import 'package:flutter/services.dart';
-import 'package:hive/hive.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:path_provider/path_provider.dart';
-import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:url_launcher/url_launcher.dart';
 // import 'package:flutter_gen/gen_l10n/app_localizations.dart'; // i18n futuro
 import 'services/notification_service.dart';
 import 'services/storage_service.dart';
+import 'package:flutter/foundation.dart' show kIsWeb;
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await _initHive();
-  runZonedGuarded(() async {
-    FlutterError.onError = (FlutterErrorDetails details) async {
-      FlutterError.presentError(details);
-      await _handleError(details.exception, details.stack);
-    };
-    runApp(
-      MultiProvider(
-        providers: [
-          ChangeNotifierProvider(create: (_) => PalomaProvider()),
-          ChangeNotifierProvider(create: (_) => FinanzaProvider()),
-          ChangeNotifierProvider(create: (_) => TransaccionComercialProvider()),
-          ChangeNotifierProvider(create: (_) => CapturaProvider()),
-          ChangeNotifierProvider(create: (_) => CompetenciaProvider()),
-          ChangeNotifierProvider(create: (_) => EstadisticaProvider()),
-          ChangeNotifierProvider(create: (_) => ReproduccionProvider()),
-          ChangeNotifierProvider(create: (_) => TratamientoProvider()),
-          ChangeNotifierProvider(create: (_) => ConfiguracionProvider()),
-          ChangeNotifierProvider(create: (_) => LicenciaProvider()),
-          ChangeNotifierProvider(create: (_) => CategoriaFinancieraProvider()),
-        ],
-        child: const MyApp(),
-      ),
-    );
-  }, (error, stack) async {
-    await _handleError(error, stack);
-  });
+  FlutterError.onError = (FlutterErrorDetails details) async {
+    FlutterError.presentError(details);
+    await _handleError(details.exception, details.stack);
+  };
+  runApp(
+    MultiProvider(
+      providers: [
+        ChangeNotifierProvider(create: (_) => PalomaProvider()),
+        ChangeNotifierProvider(create: (_) => FinanzaProvider()),
+        ChangeNotifierProvider(create: (_) => TransaccionComercialProvider()),
+        ChangeNotifierProvider(create: (_) => CapturaProvider()),
+        ChangeNotifierProvider(create: (_) => CompetenciaProvider()),
+        ChangeNotifierProvider(create: (_) => EstadisticaProvider()),
+        ChangeNotifierProvider(create: (_) => ReproduccionProvider()),
+        ChangeNotifierProvider(create: (_) => TratamientoProvider()),
+        ChangeNotifierProvider(create: (_) => ConfiguracionProvider()),
+        ChangeNotifierProvider(create: (_) => LicenciaProvider()),
+        ChangeNotifierProvider(create: (_) => CategoriaFinancieraProvider()),
+      ],
+      child: const MyApp(),
+    ),
+  );
 }
 
 Future<void> _initHive() async {
-  final dir = await getApplicationDocumentsDirectory();
-  await Hive.initFlutter(dir.path);
+  if (kIsWeb) {
+    await Hive.initFlutter();
+  } else {
+    final dir = await getApplicationDocumentsDirectory();
+    await Hive.initFlutter(dir.path);
+  }
   // Aquí puedes registrar adapters si los necesitas
 }
 
@@ -152,14 +151,10 @@ class _MyAppState extends State<MyApp> {
   bool _splashDone = false;
   bool _tipsDone = false;
   bool _registroDone = false;
-  String? _palomar;
-  String? _duenio;
 
   // Simulación de almacenamiento local (puedes reemplazar por SharedPreferences)
   static bool _tipsMostrados = false;
   static bool _registroCompletado = false;
-  static String? _palomarGuardado;
-  static String? _duenioGuardado;
 
   @override
   void initState() {
@@ -167,8 +162,6 @@ class _MyAppState extends State<MyApp> {
     // Cargar flags simulados
     _tipsDone = _tipsMostrados;
     _registroDone = _registroCompletado;
-    _palomar = _palomarGuardado;
-    _duenio = _duenioGuardado;
   }
 
   void _onSplashFinish() {
@@ -188,232 +181,182 @@ class _MyAppState extends State<MyApp> {
     setState(() {
       _registroDone = true;
       _registroCompletado = true;
-      _palomar = palomar;
-      _duenio = duenio;
-      _palomarGuardado = palomar;
-      _duenioGuardado = duenio;
     });
+    // Forzar recarga de licencia para asegurar trial activa
+    final licenciaProvider = Provider.of<LicenciaProvider>(context, listen: false);
+    licenciaProvider.loadLicencia();
   }
 
   @override
   Widget build(BuildContext context) {
-    return Consumer<ConfiguracionProvider>(
-      builder: (context, configProvider, _) {
-        final config = configProvider.configuracion;
-        final Color primaryColor = config != null
-            ? Color(int.tryParse(config.colorPrimario.replaceFirst('#', '0xff')) ?? 0xff1976d2)
-            : Colors.blue;
-        final Color secondaryColor = config != null
-            ? Color(int.tryParse(config.colorSecundario.replaceFirst('#', '0xff')) ?? 0xff388e3c)
-            : Colors.green;
-        Widget child;
-        if (!_splashDone) {
-          child = SplashScreen(onFinish: _onSplashFinish);
-        } else if (!_tipsDone) {
-          child = TipsScreen(onContinue: _onTipsFinish);
-        } else if (!_registroDone) {
-          child = RegistroInicialScreen(onFinish: _onRegistroFinish);
-        } else {
-          // Antes de mostrar HomeScreen, verificar si requiere activación
-          final licenciaProvider = Provider.of<LicenciaProvider>(context, listen: false);
-          if (licenciaProvider.requiereActivacion) {
-            // Mostrar pantalla de licencia y forzar activación
-            return Builder(
-              builder: (context) {
-                // Usar Future.microtask para mostrar el diálogo después de build
-                Future.microtask(() {
-                  final state = context.findAncestorStateOfType<NavigatorState>();
-                  showDialog(
-                    context: context,
-                    barrierDismissible: false,
-                    builder: (context) {
-                      final screen = context.findAncestorWidgetOfExactType<Navigator>() != null
-                        ? context.widget
-                        : null;
-                      return WillPopScope(
-                        onWillPop: () async => false,
-                        child: AlertDialog(
-                          title: Row(
-                            children: [
-                              const Icon(Icons.vpn_key, color: Colors.green),
-                              const SizedBox(width: 8),
-                              const Text('Activar licencia vitalicia'),
-                            ],
-                          ),
-                          content: Column(
-                            mainAxisSize: MainAxisSize.min,
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              const Text('Tu periodo de prueba ha finalizado. Debes activar la app con tu nombre y código de licencia para continuar.'),
-                              const SizedBox(height: 16),
-                              const Text('¿Necesitas una licencia? Contáctanos:', style: TextStyle(fontWeight: FontWeight.bold)),
-                              const SizedBox(height: 8),
-                              Row(
-                                children: [
-                                  const Icon(Icons.phone, size: 18, color: Colors.green),
-                                  const SizedBox(width: 6),
-                                  const Text('+5353285642', style: TextStyle(fontWeight: FontWeight.w500)),
-                                  const SizedBox(width: 8),
-                                  ElevatedButton.icon(
-                                    icon: const Icon(Icons.whatsapp, color: Colors.white, size: 18),
-                                    label: const Text('WhatsApp'),
-                                    style: ElevatedButton.styleFrom(backgroundColor: Colors.green, padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4), textStyle: TextStyle(fontSize: 13)),
-                                    onPressed: () async {
-                                      final url = 'https://wa.me/5353285642?text=Hola, quiero adquirir una licencia para la app Gestión de Palomar.';
-                                      if (await canLaunch(url)) {
-                                        await launch(url);
-                                      }
-                                    },
-                                  ),
-                                ],
-                              ),
-                              const SizedBox(height: 4),
-                              Row(
-                                children: [
-                                  const Icon(Icons.email, size: 18, color: Colors.blue),
-                                  const SizedBox(width: 6),
-                                  const Text('app.gestiondepalomar@gmail.com', style: TextStyle(fontWeight: FontWeight.w500)),
-                                  const SizedBox(width: 8),
-                                  ElevatedButton.icon(
-                                    icon: const Icon(Icons.email, color: Colors.white, size: 18),
-                                    label: const Text('Email'),
-                                    style: ElevatedButton.styleFrom(backgroundColor: Colors.blue, padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4), textStyle: TextStyle(fontSize: 13)),
-                                    onPressed: () async {
-                                      final subject = Uri.encodeComponent('Solicitud de licencia - Gestión de Palomar');
-                                      final body = Uri.encodeComponent('Hola, quiero adquirir una licencia para la app Gestión de Palomar.');
-                                      final url = 'mailto:app.gestiondepalomar@gmail.com?subject=$subject&body=$body';
-                                      if (await canLaunch(url)) {
-                                        await launch(url);
-                                      }
-                                    },
-                                  ),
-                                ],
-                              ),
-                            ],
-                          ),
-                          actions: [
-                            TextButton(
-                              onPressed: () {
-                                Navigator.of(context).pop();
-                                Navigator.of(context).pushReplacementNamed('/licencia');
-                              },
-                              child: const Text('Activar ahora'),
-                            ),
-                          ],
-                        ),
-                      );
-                    },
-                  );
-                });
-                return const HomeScreen();
-              },
+    return MaterialApp(
+      debugShowCheckedModeBanner: false,
+      routes: {
+        '/mi-palomar': (context) => const MiPalomarScreen(),
+        '/finanzas': (context) => const FinanzasScreen(),
+        '/compra-venta': (context) => const CompraVentaScreen(),
+        '/capturas': (context) => const CapturasScreen(),
+        '/competencias': (context) => const CompetenciasScreen(),
+        '/estadisticas': (context) => const EstadisticasScreen(),
+        '/reproduccion': (context) => const ReproduccionScreen(),
+        '/tratamientos': (context) => const TratamientosScreen(),
+        '/configuracion': (context) => const ConfiguracionScreen(),
+        '/licencia': (context) => const LicenciaScreen(),
+      }, // <-- Agregado para navegación
+      home: Consumer2<ConfiguracionProvider, LicenciaProvider>(
+        builder: (context, configProvider, licenciaProvider, _) {
+          if (configProvider.isLoading || licenciaProvider.isLoading) {
+            return const Scaffold(
+              body: Center(child: CircularProgressIndicator()),
             );
-          } else {
-            child = const HomeScreen();
           }
-        }
-
-        // Llamar a notificaciones inteligentes al inicio
-        Future.microtask(() async {
-          final palomas = Provider.of<PalomaProvider>(context, listen: false).palomas;
-          final tratamientos = Provider.of<TratamientoProvider>(context, listen: false).tratamientos;
-          final transacciones = Provider.of<FinanzaProvider>(context, listen: false).transacciones;
-          final licencia = Provider.of<LicenciaProvider>(context, listen: false).licencia;
-          final stats = await StorageService().getStorageStats();
-          DateTime? lastBackup;
-          if (stats['lastBackup'] != null && stats['lastBackup'] != 'No disponible') {
-            // Suponiendo que el backup tiene un campo timestamp
-            final backups = await StorageService().listBackups();
-            if (backups.isNotEmpty) {
-              final file = backups.first;
-              final stat = file.statSync();
-              lastBackup = stat.modified;
+          final config = configProvider.configuracion;
+          final Color primaryColor = config != null
+              ? Color(int.tryParse(config.colorPrimario.replaceFirst('#', '0xff')) ?? 0xff1976d2)
+              : Colors.blue;
+          final Color secondaryColor = config != null
+              ? Color(int.tryParse(config.colorSecundario.replaceFirst('#', '0xff')) ?? 0xff388e3c)
+              : Colors.green;
+          Widget child;
+          if (!_splashDone) {
+            child = SplashScreen(onFinish: _onSplashFinish);
+          } else if (!_tipsDone) {
+            child = TipsScreen(onContinue: _onTipsFinish);
+          } else if (!_registroDone) {
+            child = RegistroInicialScreen(onFinish: _onRegistroFinish);
+          } else {
+            // Antes de mostrar HomeScreen, verificar si requiere activación
+            final licenciaProvider = Provider.of<LicenciaProvider>(context, listen: false);
+            final licencia = licenciaProvider.licencia;
+            if (licencia != null && ((licencia.tipo == 'Trial' && !licencia.expirada) || (licencia.tipo == 'Vitalicia' && licencia.estaActiva))) {
+              child = const HomeScreen();
+            } else if (licenciaProvider.requiereActivacion) {
+              // Mostrar pantalla de licencia y forzar activación
+              return Builder(
+                builder: (context) {
+                  // Usar Future.microtask para mostrar el diálogo después de build
+                  Future.microtask(() {
+                    final state = context.findAncestorStateOfType<NavigatorState>();
+                    showDialog(
+                      context: context,
+                      barrierDismissible: false,
+                      builder: (context) {
+                        return WillPopScope(
+                          onWillPop: () async => false,
+                          child: AlertDialog(
+                            title: Row(
+                              children: [
+                                const Icon(Icons.vpn_key, color: Colors.green),
+                                const SizedBox(width: 8),
+                                const Text('Activar licencia vitalicia'),
+                              ],
+                            ),
+                            content: Column(
+                              mainAxisSize: MainAxisSize.min,
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                const Text('Tu periodo de prueba ha finalizado. Debes activar la app con tu nombre y código de licencia para continuar.'),
+                                const SizedBox(height: 16),
+                                const Text('¿Necesitas una licencia? Contáctanos:', style: TextStyle(fontWeight: FontWeight.bold)),
+                                const SizedBox(height: 8),
+                                Row(
+                                  children: [
+                                    const Icon(Icons.phone, size: 18, color: Colors.green),
+                                    const SizedBox(width: 6),
+                                    const Text('+5353285642', style: TextStyle(fontWeight: FontWeight.w500)),
+                                    const SizedBox(width: 8),
+                                    ElevatedButton.icon(
+                                      icon: const FaIcon(FontAwesomeIcons.whatsapp, color: Colors.white, size: 18),
+                                      label: const Text('WhatsApp'),
+                                      style: ElevatedButton.styleFrom(backgroundColor: Colors.green, padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4), textStyle: TextStyle(fontSize: 13)),
+                                      onPressed: () async {
+                                        final url = 'https://wa.me/5353285642?text=Hola, quiero adquirir una licencia para la app Gestión de Palomar.';
+                                        if (await canLaunch(url)) {
+                                          await launch(url);
+                                        }
+                                      },
+                                    ),
+                                  ],
+                                ),
+                                const SizedBox(height: 4),
+                                Row(
+                                  children: [
+                                    const Icon(Icons.email, size: 18, color: Colors.blue),
+                                    const SizedBox(width: 6),
+                                    const Text('app.gestiondepalomar@gmail.com', style: TextStyle(fontWeight: FontWeight.w500)),
+                                    const SizedBox(width: 8),
+                                    ElevatedButton.icon(
+                                      icon: const FaIcon(FontAwesomeIcons.envelope, color: Colors.white, size: 18),
+                                      label: const Text('Email'),
+                                      style: ElevatedButton.styleFrom(backgroundColor: Colors.blue, padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4), textStyle: TextStyle(fontSize: 13)),
+                                      onPressed: () async {
+                                        final subject = Uri.encodeComponent('Solicitud de licencia - Gestión de Palomar');
+                                        final body = Uri.encodeComponent('Hola, quiero adquirir una licencia para la app Gestión de Palomar.');
+                                        final url = 'mailto:app.gestiondepalomar@gmail.com?subject=$subject&body=$body';
+                                        if (await canLaunch(url)) {
+                                          await launch(url);
+                                        }
+                                      },
+                                    ),
+                                  ],
+                                ),
+                              ],
+                            ),
+                            actions: [
+                              TextButton(
+                                onPressed: () {
+                                  Navigator.of(context).pop();
+                                  Navigator.of(context).pushReplacementNamed('/licencia');
+                                },
+                                child: const Text('Activar ahora'),
+                              ),
+                            ],
+                          ),
+                        );
+                      },
+                    );
+                  });
+                  return const HomeScreen();
+                },
+              );
+            } else {
+              child = const HomeScreen();
             }
           }
-          final backupReminderDays = 7; // Default value
-          await NotificationService().checkAllNotifications(
-            palomas: palomas,
-            tratamientos: tratamientos,
-            transacciones: transacciones,
-            lastBackupDate: lastBackup,
-            backupReminderDays: backupReminderDays,
-            licenciaExpiracion: licencia?.fechaExpiracion,
-          );
-        });
 
-        return MediaQuery(
-          data: MediaQuery.of(context).copyWith(textScaleFactor: MediaQuery.of(context).textScaleFactor.clamp(1.0, 1.4)),
-          child: MaterialApp(
-            title: 'Gestión de Palomar',
-            debugShowCheckedModeBanner: false,
-            theme: ThemeData(
-              primaryColor: primaryColor,
-              colorScheme: ColorScheme.fromSwatch(primarySwatch: _createMaterialColor(primaryColor))
-                  .copyWith(secondary: secondaryColor),
-              appBarTheme: AppBarTheme(
-                backgroundColor: primaryColor,
-                foregroundColor: Colors.white,
-              ),
-              floatingActionButtonTheme: FloatingActionButtonThemeData(
-                backgroundColor: secondaryColor,
-                foregroundColor: Colors.white,
-              ),
-              visualDensity: VisualDensity.adaptivePlatformDensity,
-            ),
-            home: LayoutBuilder(
-              builder: (context, constraints) {
-                // Si la pantalla es muy ancha, centra el contenido y limita el ancho máximo
-                if (constraints.maxWidth > 700) {
-                  return Center(
-                    child: Container(
-                      width: 700,
-                      margin: const EdgeInsets.symmetric(vertical: 0, horizontal: 24),
-                      child: child,
-                    ),
-                  );
-                } else {
-                  return child;
-                }
-              },
-            ),
-            routes: {
-              '/mi-palomar': (context) => const MiPalomarScreen(),
-              '/finanzas': (context) => const FinanzasScreen(),
-              '/compra-venta': (context) => const CompraVentaScreen(),
-              '/capturas': (context) => const CapturasScreen(),
-              '/competencias': (context) => const CompetenciasScreen(),
-              '/estadisticas': (context) => const EstadisticasScreen(),
-              '/reproduccion': (context) => const ReproduccionScreen(),
-              '/tratamientos': (context) => const TratamientosScreen(),
-              '/configuracion': (context) => const ConfiguracionScreen(),
-              '/licencia': (context) => const LicenciaScreen(),
-            },
-            // Elimino localizationsDelegates y supportedLocales
-            // locale: config?.idioma != null ? Locale(config.idioma) : null,
-          ),
-        );
-        // TODO: Mejorar accesibilidad: agregar Semantics, Focus, y pruebas de contraste en todos los widgets principales.
-      },
+          // Llamar a notificaciones inteligentes al inicio
+          Future.microtask(() async {
+            final palomas = Provider.of<PalomaProvider>(context, listen: false).palomas;
+            final tratamientos = Provider.of<TratamientoProvider>(context, listen: false).tratamientos;
+            final transacciones = Provider.of<FinanzaProvider>(context, listen: false).transacciones;
+            final licencia = licenciaProvider.licencia;
+            final stats = await StorageService().getStorageStats();
+            DateTime? lastBackup;
+            if (stats['lastBackup'] != null && stats['lastBackup'] != 'No disponible') {
+              // Suponiendo que el backup tiene un campo timestamp
+              final backups = await StorageService().listBackups();
+              if (backups.isNotEmpty) {
+                final file = backups.first;
+                final stat = file.statSync();
+                lastBackup = stat.modified;
+              }
+            }
+            final backupReminderDays = 7; // Default value
+            await NotificationService().checkAllNotifications(
+              palomas: palomas,
+              tratamientos: tratamientos,
+              transacciones: transacciones,
+              lastBackupDate: lastBackup,
+              backupReminderDays: backupReminderDays,
+              licenciaExpiracion: licencia?.fechaExpiracion,
+            );
+          });
+
+          return child;
+        },
+      ),
+      // Puedes agregar aquí theme, localizations, etc.
     );
-  }
-
-  MaterialColor _createMaterialColor(Color color) {
-    List strengths = <double>[.05];
-    Map<int, Color> swatch = {};
-    final int r = color.red, g = color.green, b = color.blue;
-    for (int i = 1; i < 10; i++) {
-      strengths.add(0.1 * i);
-    }
-    for (var strength in strengths) {
-      final double ds = 0.5 - strength;
-      swatch[(strength * 1000).round()] = Color.fromRGBO(
-        r + ((ds < 0 ? r : (255 - r)) * ds).round(),
-        g + ((ds < 0 ? g : (255 - g)) * ds).round(),
-        b + ((ds < 0 ? b : (255 - b)) * ds).round(),
-        1,
-      );
-    }
-    return MaterialColor(color.value, swatch);
   }
 }
 
@@ -429,6 +372,7 @@ class HomeScreen extends StatelessWidget {
         backgroundColor: Colors.blue,
         foregroundColor: Colors.white,
       ),
+      backgroundColor: const Color(0xFFE0E0E0), // Fondo gris un poco más oscuro
       body: SafeArea(
         child: SingleChildScrollView(
           padding: const EdgeInsets.all(24),

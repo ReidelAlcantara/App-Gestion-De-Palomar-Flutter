@@ -4,8 +4,6 @@ import '../../providers/competencia_provider.dart';
 import '../../widgets/competencia_card.dart';
 import '../../widgets/competencia_form.dart';
 import '../../models/competencia.dart';
-import '../../constants/app_colors.dart';
-import '../../constants/app_text_styles.dart';
 // import 'package:flutter_gen/gen_l10n/app_localizations.dart'; // i18n futuro
 
 class CompetenciasScreen extends StatefulWidget {
@@ -138,16 +136,17 @@ class _CompetenciasScreenState extends State<CompetenciasScreen>
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              Icon(Icons.emoji_events, size: 64, color: Colors.grey),
+              Icon(Icons.construction, size: 64, color: Colors.orange),
               SizedBox(height: 24),
               Text(
-                'Módulo de Competiciones',
-                style: const TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+                'Módulo en construcción para próximas versiones',
+                style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
+                textAlign: TextAlign.center,
               ),
-              SizedBox(height: 12),
+              SizedBox(height: 16),
               Text(
-                'Competiciones próximas',
-                style: TextStyle(fontSize: 16, color: Colors.grey),
+                'Envíe sus propuestas de funcionamiento a app.gestiondepalomar@gmail.com',
+                style: TextStyle(fontSize: 16, color: Colors.grey[700]),
                 textAlign: TextAlign.center,
               ),
             ],

@@ -3,7 +3,6 @@ import 'package:provider/provider.dart';
 import '../../providers/estadistica_provider.dart';
 import '../../providers/paloma_provider.dart';
 import '../../providers/finanza_provider.dart';
-import '../../providers/transaccion_comercial_provider.dart';
 import '../../providers/captura_provider.dart';
 import '../../providers/competencia_provider.dart';
 import '../../widgets/estadistica_card.dart';

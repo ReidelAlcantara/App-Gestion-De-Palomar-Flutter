@@ -71,29 +71,9 @@ class _LicenciaScreenState extends State<LicenciaScreen> {
                       labelText: 'Código de licencia',
                       border: const OutlineInputBorder(),
                       prefixIcon: const Icon(Icons.vpn_key),
-                      hintText: 'Ejemplo: ABC123',
                     ),
                     textCapitalization: TextCapitalization.characters,
                     validator: (value) => value == null || value.trim().isEmpty ? 'El código de licencia es requerido' : null,
-                  ),
-                  const SizedBox(height: 16),
-                  Container(
-                    padding: const EdgeInsets.all(12),
-                    decoration: BoxDecoration(
-                      color: Colors.blue[50],
-                      borderRadius: BorderRadius.circular(8),
-                      border: Border.all(color: Colors.blue[200]!),
-                    ),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text('Licencia válida (ejemplo)', style: const TextStyle(fontWeight: FontWeight.bold, color: Colors.blue)),
-                        const SizedBox(height: 4),
-                        Text('ABC123', style: const TextStyle(fontFamily: 'monospace', color: Colors.black87)),
-                        const SizedBox(height: 8),
-                        Text('El nombre de la licencia debe coincidir', style: const TextStyle(fontSize: 12)),
-                      ],
-                    ),
                   ),
                 ],
               ),
@@ -226,7 +206,6 @@ class _LicenciaScreenState extends State<LicenciaScreen> {
         actions: [
           IconButton(
             onPressed: () {
-              // TODO: Implementar ayuda
               ScaffoldMessenger.of(context).showSnackBar(
                 SnackBar(content: Text('Ayuda próximamente')),
               );
@@ -419,7 +398,7 @@ class _LicenciaScreenState extends State<LicenciaScreen> {
                   padding: const EdgeInsets.all(12),
                   decoration: BoxDecoration(
                     color: _getColorFromHex(licencia.colorTipoHex)
-                        .withOpacity(0.1),
+                        .withAlpha((0.1 * 255).toInt()),
                     borderRadius: BorderRadius.circular(12),
                   ),
                   child: Icon(
@@ -642,7 +621,6 @@ class _LicenciaScreenState extends State<LicenciaScreen> {
               title: Text('Soporte Técnico'),
               subtitle: Text('Contactar para ayuda'),
               onTap: () {
-                // TODO: Implementar soporte técnico
                 ScaffoldMessenger.of(context).showSnackBar(
                   SnackBar(content: Text('Soporte técnico próximamente')),
                 );

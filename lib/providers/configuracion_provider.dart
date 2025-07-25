@@ -1,4 +1,3 @@
-import 'package:flutter/material.dart';
 import '../models/configuracion.dart';
 import '../services/storage_service.dart';
 import '../services/export_service.dart';
@@ -31,7 +30,7 @@ class ConfiguracionProvider extends BaseProvider {
 
       final data = await storageService.getConfig();
       if (data.isNotEmpty) {
-        _configuracion = Configuracion.fromJson(data);
+        _configuracion = Configuracion.fromJson(Map<String, dynamic>.from(data));
       } else {
         // Crear configuración por defecto si no existe
         _configuracion = Configuracion.defaultConfig();

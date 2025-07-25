@@ -26,20 +26,6 @@ class _CriaFormState extends State<CriaForm> {
   String _selectedColor = 'Azul';
   bool _isLoading = false;
 
-  final List<String> _razas = [
-    'Racing Homer',
-    'Tippler',
-    'Tumbler',
-    'Carrier',
-    'Fantail',
-    'Jacobin',
-    'Modena',
-    'Lahore',
-    'King',
-    'Giant Homer',
-    'Otro',
-  ];
-
   final List<String> _colores = [
     'Azul',
     'Negro',

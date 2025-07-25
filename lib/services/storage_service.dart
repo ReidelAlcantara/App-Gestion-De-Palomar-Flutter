@@ -1,14 +1,4 @@
 import 'dart:convert';
-import '../models/paloma.dart';
-import '../models/transaccion.dart';
-import '../models/transaccion_comercial.dart';
-import '../models/captura.dart';
-import '../models/competencia.dart';
-import '../models/estadistica.dart';
-import '../models/reproduccion.dart';
-import '../models/tratamiento.dart';
-import '../models/configuracion.dart';
-import '../models/licencia.dart';
 import 'package:hive/hive.dart';
 import 'package:path_provider/path_provider.dart';
 import 'dart:io';
@@ -23,16 +13,6 @@ class StorageService {
   static List<Map<String, dynamic>> _categoriasFinancieras = [];
 
   // Claves de almacenamiento
-  static const String _palomasKey = 'palomas';
-  static const String _transaccionesKey = 'transacciones';
-  static const String _transaccionesComercialesKey = 'transacciones_comerciales';
-  static const String _capturasKey = 'capturas';
-  static const String _competenciasKey = 'competencias';
-  static const String _estadisticasKey = 'estadisticas';
-  static const String _reproduccionesKey = 'reproducciones';
-  static const String _tratamientosKey = 'tratamientos';
-  static const String _configKey = 'configuracion';
-  static const String _licenciaKey = 'licencia';
   static const String _backupKey = 'backup';
   static const String _backupCountKey = 'backup_count';
 
@@ -43,7 +23,6 @@ class StorageService {
       final List<dynamic> rawList = box.get('palomas', defaultValue: []);
       return List<Map<String, dynamic>>.from(rawList);
     } catch (e) {
-      print('Error al obtener palomas: $e');
       return [];
     }
   }
@@ -54,7 +33,6 @@ class StorageService {
       await box.put('palomas', palomas);
       await _incrementBackupCount();
     } catch (e) {
-      print('Error al guardar palomas: $e');
     }
   }
 
@@ -65,7 +43,6 @@ class StorageService {
       palomas.add(paloma);
       await this.savePalomas(palomas);
     } catch (e) {
-      print('Error adding paloma: $e');
     }
   }
 
@@ -78,7 +55,6 @@ class StorageService {
         await this.savePalomas(palomas);
       }
     } catch (e) {
-      print('Error updating paloma: $e');
     }
   }
 
@@ -88,7 +64,6 @@ class StorageService {
       palomas.removeWhere((p) => p['id'] == id);
       await this.savePalomas(palomas);
     } catch (e) {
-      print('Error deleting paloma: $e');
     }
   }
 
@@ -99,7 +74,6 @@ class StorageService {
       final List<dynamic> rawList = box.get('transacciones', defaultValue: []);
       return List<Map<String, dynamic>>.from(rawList);
     } catch (e) {
-      print('Error getting transacciones: $e');
       return [];
     }
   }
@@ -110,7 +84,6 @@ class StorageService {
       await box.put('transacciones', transacciones);
       await _incrementBackupCount();
     } catch (e) {
-      print('Error saving transacciones: $e');
     }
   }
 
@@ -121,7 +94,6 @@ class StorageService {
       transacciones.add(transaccion);
       await this.saveTransacciones(transacciones);
     } catch (e) {
-      print('Error adding transaccion: $e');
     }
   }
 
@@ -134,7 +106,6 @@ class StorageService {
         await this.saveTransacciones(transacciones);
       }
     } catch (e) {
-      print('Error updating transaccion: $e');
     }
   }
 
@@ -144,7 +115,6 @@ class StorageService {
       transacciones.removeWhere((t) => t['id'] == id);
       await this.saveTransacciones(transacciones);
     } catch (e) {
-      print('Error deleting transaccion: $e');
     }
   }
 
@@ -156,7 +126,6 @@ class StorageService {
       final List<dynamic> rawList = box.get('transacciones_comerciales', defaultValue: []);
       return List<Map<String, dynamic>>.from(rawList);
     } catch (e) {
-      print('Error getting transacciones comerciales: $e');
       return [];
     }
   }
@@ -168,7 +137,6 @@ class StorageService {
       await box.put('transacciones_comerciales', transacciones);
       await _incrementBackupCount();
     } catch (e) {
-      print('Error saving transacciones comerciales: $e');
     }
   }
 
@@ -179,7 +147,6 @@ class StorageService {
       transacciones.add(transaccion);
       await saveTransaccionesComerciales(transacciones);
     } catch (e) {
-      print('Error adding transaccion comercial: $e');
     }
   }
 
@@ -193,7 +160,6 @@ class StorageService {
         await saveTransaccionesComerciales(transacciones);
       }
     } catch (e) {
-      print('Error updating transaccion comercial: $e');
     }
   }
 
@@ -203,7 +169,6 @@ class StorageService {
       transacciones.removeWhere((t) => t['id'] == id);
       await saveTransaccionesComerciales(transacciones);
     } catch (e) {
-      print('Error deleting transaccion comercial: $e');
     }
   }
 
@@ -214,7 +179,6 @@ class StorageService {
       final List<dynamic> rawList = box.get('capturas', defaultValue: []);
       return List<Map<String, dynamic>>.from(rawList);
     } catch (e) {
-      print('Error getting capturas: $e');
       return [];
     }
   }
@@ -225,7 +189,6 @@ class StorageService {
       await box.put('capturas', capturas);
       await _incrementBackupCount();
     } catch (e) {
-      print('Error saving capturas: $e');
     }
   }
 
@@ -236,7 +199,6 @@ class StorageService {
       capturas.add(captura);
       await this.saveCapturas(capturas);
     } catch (e) {
-      print('Error adding captura: $e');
     }
   }
 
@@ -249,7 +211,6 @@ class StorageService {
         await this.saveCapturas(capturas);
       }
     } catch (e) {
-      print('Error updating captura: $e');
     }
   }
 
@@ -259,7 +220,6 @@ class StorageService {
       capturas.removeWhere((c) => c['id'] == id);
       await this.saveCapturas(capturas);
     } catch (e) {
-      print('Error deleting captura: $e');
     }
   }
 
@@ -270,7 +230,6 @@ class StorageService {
       final List<dynamic> rawList = box.get('competencias', defaultValue: []);
       return List<Map<String, dynamic>>.from(rawList);
     } catch (e) {
-      print('Error getting competencias: $e');
       return [];
     }
   }
@@ -281,7 +240,6 @@ class StorageService {
       await box.put('competencias', competencias);
       await _incrementBackupCount();
     } catch (e) {
-      print('Error saving competencias: $e');
     }
   }
 
@@ -292,7 +250,6 @@ class StorageService {
       competencias.add(competencia);
       await this.saveCompetencias(competencias);
     } catch (e) {
-      print('Error adding competencia: $e');
     }
   }
 
@@ -305,7 +262,6 @@ class StorageService {
         await this.saveCompetencias(competencias);
       }
     } catch (e) {
-      print('Error updating competencia: $e');
     }
   }
 
@@ -315,7 +271,6 @@ class StorageService {
       competencias.removeWhere((c) => c['id'] == id);
       await this.saveCompetencias(competencias);
     } catch (e) {
-      print('Error deleting competencia: $e');
     }
   }
 
@@ -326,7 +281,6 @@ class StorageService {
       final List<dynamic> rawList = box.get('estadisticas', defaultValue: []);
       return List<Map<String, dynamic>>.from(rawList);
     } catch (e) {
-      print('Error getting estadisticas: $e');
       return [];
     }
   }
@@ -337,7 +291,6 @@ class StorageService {
       await box.put('estadisticas', estadisticas);
       await _incrementBackupCount();
     } catch (e) {
-      print('Error saving estadisticas: $e');
     }
   }
 
@@ -348,7 +301,6 @@ class StorageService {
       estadisticas.add(estadistica);
       await this.saveEstadisticas(estadisticas);
     } catch (e) {
-      print('Error adding estadistica: $e');
     }
   }
 
@@ -361,7 +313,6 @@ class StorageService {
         await this.saveEstadisticas(estadisticas);
       }
     } catch (e) {
-      print('Error updating estadistica: $e');
     }
   }
 
@@ -371,7 +322,6 @@ class StorageService {
       estadisticas.removeWhere((e) => e['id'] == id);
       await this.saveEstadisticas(estadisticas);
     } catch (e) {
-      print('Error deleting estadistica: $e');
     }
   }
 
@@ -382,7 +332,6 @@ class StorageService {
       final List<dynamic> rawList = box.get('reproducciones', defaultValue: []);
       return List<Map<String, dynamic>>.from(rawList);
     } catch (e) {
-      print('Error getting reproducciones: $e');
       return [];
     }
   }
@@ -393,7 +342,6 @@ class StorageService {
       await box.put('reproducciones', reproducciones);
       await _incrementBackupCount();
     } catch (e) {
-      print('Error saving reproducciones: $e');
     }
   }
 
@@ -404,7 +352,6 @@ class StorageService {
       final List<dynamic> rawList = box.get('tratamientos', defaultValue: []);
       return List<Map<String, dynamic>>.from(rawList);
     } catch (e) {
-      print('Error getting tratamientos: $e');
       return [];
     }
   }
@@ -415,7 +362,6 @@ class StorageService {
       await box.put('tratamientos', tratamientos);
       await _incrementBackupCount();
     } catch (e) {
-      print('Error saving tratamientos: $e');
     }
   }
 
@@ -426,7 +372,6 @@ class StorageService {
       tratamientos.add(tratamiento);
       await this.saveTratamientos(tratamientos);
     } catch (e) {
-      print('Error adding tratamiento: $e');
     }
   }
 
@@ -439,7 +384,6 @@ class StorageService {
         await this.saveTratamientos(tratamientos);
       }
     } catch (e) {
-      print('Error updating tratamiento: $e');
     }
   }
 
@@ -449,7 +393,6 @@ class StorageService {
       tratamientos.removeWhere((t) => t['id'] == id);
       await this.saveTratamientos(tratamientos);
     } catch (e) {
-      print('Error deleting tratamiento: $e');
     }
   }
 
@@ -463,7 +406,6 @@ class StorageService {
       }
       return {};
     } catch (e) {
-      print('Error getting configuracion: $e');
       return {};
     }
   }
@@ -474,7 +416,6 @@ class StorageService {
       await box.put('configuracion', config);
       await _incrementBackupCount();
     } catch (e) {
-      print('Error saving configuracion: $e');
     }
   }
 
@@ -488,7 +429,6 @@ class StorageService {
       }
       return {};
     } catch (e) {
-      print('Error getting licencia: $e');
       return {};
     }
   }
@@ -499,7 +439,6 @@ class StorageService {
       await box.put('licencia', licencia);
       await _incrementBackupCount();
     } catch (e) {
-      print('Error saving licencia: $e');
     }
   }
 
@@ -531,9 +470,7 @@ class StorageService {
       final backupString = jsonEncode(backup);
       _storage[_backupKey] = backupString;
       _storage[_backupCountKey] = '0';
-      print('Backup creado exitosamente');
     } catch (e) {
-      print('Error creating backup: $e');
     }
   }
 
@@ -572,12 +509,10 @@ class StorageService {
         if (backup['licencia'] != null) {
           await saveLicencia(Map<String, dynamic>.from(backup['licencia']));
         }
-        print('Backup restaurado exitosamente');
         return backup;
       }
       return null;
     } catch (e) {
-      print('Error restoring backup: $e');
       return null;
     }
   }
@@ -590,7 +525,6 @@ class StorageService {
       }
       return null;
     } catch (e) {
-      print('Error getting backup: $e');
       return null;
     }
   }
@@ -599,12 +533,10 @@ class StorageService {
     try {
       final backup = await this.getBackup();
       if (backup != null && backup[key] != null) {
-        print('Backup restaurado para: $key');
         return true;
       }
       return false;
     } catch (e) {
-      print('Error restoring from backup: $e');
       return false;
     }
   }
@@ -636,7 +568,6 @@ class StorageService {
       await file.writeAsString(backupString);
       return file.path;
     } catch (e) {
-      print('Error creating backup file: $e');
       rethrow;
     }
   }
@@ -652,7 +583,6 @@ class StorageService {
       files.sort((a, b) => b.statSync().modified.compareTo(a.statSync().modified));
       return files;
     } catch (e) {
-      print('Error listing backups: $e');
       return [];
     }
   }
@@ -666,7 +596,6 @@ class StorageService {
       }
       return null;
     } catch (e) {
-      print('Error reading backup file: $e');
       return null;
     }
   }
@@ -707,7 +636,6 @@ class StorageService {
         }
       }
     } catch (e) {
-      print('Error restoring from backup file: $e');
       rethrow;
     }
   }
@@ -719,7 +647,6 @@ class StorageService {
         await file.delete();
       }
     } catch (e) {
-      print('Error deleting backup file: $e');
     }
   }
 
@@ -741,7 +668,6 @@ class StorageService {
         'version': '0.8.0-beta',
       };
     } catch (e) {
-      print('Error exporting data: $e');
       return {};
     }
   }
@@ -751,7 +677,6 @@ class StorageService {
       final data = jsonDecode(jsonData);
       return await this.importData(data);
     } catch (e) {
-      print('Error importing all data: $e');
       return false;
     }
   }
@@ -788,10 +713,8 @@ class StorageService {
       if (data['licencia'] != null) {
         await saveLicencia(Map<String, dynamic>.from(data['licencia']));
       }
-      print('Datos importados exitosamente');
       return true;
     } catch (e) {
-      print('Error importing data: $e');
       return false;
     }
   }
@@ -829,7 +752,6 @@ class StorageService {
         'lastBackup': await this.getBackup() != null ? 'Disponible' : 'No disponible',
       };
     } catch (e) {
-      print('Error getting storage stats: $e');
       return {};
     }
   }
@@ -847,7 +769,6 @@ class StorageService {
         await StorageService().createBackup();
       }
     } catch (e) {
-      print('Error incrementing backup count: $e');
     }
   }
 
@@ -858,7 +779,6 @@ class StorageService {
         await StorageService().createBackup();
       }
     } catch (e) {
-      print('Error creating initial backup: $e');
     }
   }
 
@@ -874,9 +794,7 @@ class StorageService {
   static Future<void> clearAllData() async {
     try {
       _storage.clear();
-      print('Todos los datos han sido eliminados');
     } catch (e) {
-      print('Error clearing data: $e');
     }
   }
 
@@ -886,7 +804,6 @@ class StorageService {
       final data = await StorageService().exportAllData();
       return jsonEncode(data);
     } catch (e) {
-      print('Error exporting all data: $e');
       return '{}';
     }
   }

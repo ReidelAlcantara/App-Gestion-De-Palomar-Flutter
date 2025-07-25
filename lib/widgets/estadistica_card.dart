@@ -66,7 +66,7 @@ class EstadisticaCard extends StatelessWidget {
                     Container(
                       padding: const EdgeInsets.all(8),
                       decoration: BoxDecoration(
-                        color: _getTipoColor().withOpacity(0.1),
+                        color: _getTipoColor().withAlpha((0.1 * 255).toInt()),
                         borderRadius: BorderRadius.circular(8),
                       ),
                       child: Icon(
@@ -91,7 +91,7 @@ class EstadisticaCard extends StatelessWidget {
                             estadistica.tipo.toUpperCase(),
                             style: TextStyle(
                               fontSize: 12,
-                              color: _getTipoColor().withOpacity(0.85), // Mejor contraste
+                              color: _getTipoColor().withAlpha((0.85 * 255).toInt()), // Mejor contraste
                               fontWeight: FontWeight.w500,
                             ),
                           ),
@@ -342,7 +342,7 @@ class EstadisticaCard extends StatelessWidget {
           label,
           style: TextStyle(
             fontSize: 12,
-            color: color.withOpacity(0.85), // Mejor contraste
+            color: color.withAlpha((0.85 * 255).toInt()), // Mejor contraste
           ),
         ),
       ],

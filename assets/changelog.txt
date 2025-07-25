@@ -6,22 +6,34 @@ v0.8.0-beta
 - Enlaces directos a grupos de comunidad (WhatsApp y Telegram).
 - Correcciones menores y optimización general.
 
-v0.1.0
-- Primer prototipo funcional: gestión básica de palomas, finanzas, reproducción, capturas, competencias y tratamientos.
+v0.7.0
+- Nueva pantalla de tips con descripciones de todos los módulos principales.
+- Mejoras en el formulario de compra/venta: soporte multimoneda (CUP, USD, MLC).
+- Limpieza y optimización de código, corrección de errores menores.
+- Mejoras visuales en la pantalla principal y módulos.
 
-v0.2.0
-- Estadísticas iniciales y reportes básicos.
-- Mejoras en la navegación y estructura de módulos.
-
-v0.3.0
-- Backup y exportación de datos (JSON).
-- Personalización de tema y colores.
-
-v0.4.0
-- Gráficos interactivos en estadísticas.
-- Filtros avanzados y visualización mejorada.
+v0.6.0
+- Persistencia mejorada en todos los módulos (palomas, finanzas, tratamientos, etc.).
+- Eliminación de datos de ejemplo y balance inicial en cero.
+- Mejoras en la gestión de licencias y periodo de prueba.
+- Traducción completa de la interfaz al español.
 
 v0.5.0
 - Configuración granular de notificaciones.
 - Mejoras de accesibilidad y UX.
 - Corrección de errores y optimizaciones. 
+
+v0.4.0
+- Gráficos interactivos en estadísticas.
+- Filtros avanzados y visualización mejorada.
+
+v0.3.0
+- Backup y exportación de datos (JSON).
+- Personalización de tema y colores.
+
+v0.2.0
+- Estadísticas iniciales y reportes básicos.
+- Mejoras en la navegación y estructura de módulos.
+
+v0.1.0
+- Primer prototipo funcional: gestión básica de palomas, finanzas, reproducción, capturas, competencias y tratamientos. 

@@ -92,7 +92,7 @@ class PalomaCard extends StatelessWidget {
                                   Text(
                                     paloma.anillo!,
                                     style: AppTextStyles.bodyMedium.copyWith(
-                                      color: AppColors.onSurface.withOpacity(0.7),
+                                      color: AppColors.onSurface.withAlpha((0.7 * 255).toInt()),
                                     ),
                                   ),
                               ],
@@ -103,7 +103,7 @@ class PalomaCard extends StatelessWidget {
                             icon: const Icon(Icons.edit, color: Colors.blue),
                             tooltip: 'Editar',
                             onPressed: onEdit,
-                            focusColor: Colors.blue.withOpacity(0.2),
+                            focusColor: Colors.blue.withAlpha((0.2 * 255).toInt()),
                             splashRadius: 24,
                             autofocus: false,
                             enableFeedback: true,
@@ -270,7 +270,7 @@ class PalomaCard extends StatelessWidget {
                                   Text(
                                     paloma.observaciones!,
                                     style: AppTextStyles.bodySmall.copyWith(
-                                      color: AppColors.onSurface.withOpacity(0.7),
+                                      color: AppColors.onSurface.withAlpha((0.7 * 255).toInt()),
                                     ),
                                     maxLines: 2,
                                     overflow: TextOverflow.ellipsis,
@@ -313,7 +313,7 @@ class PalomaCard extends StatelessWidget {
             child: Text(
               display,
               style: AppTextStyles.bodySmall.copyWith(
-                color: AppColors.onSurface.withOpacity(0.85), // Mejor contraste
+                color: AppColors.onSurface.withAlpha((0.85 * 255).toInt()), // Mejor contraste
               ),
             ),
           ),
@@ -356,7 +356,7 @@ class PalomaCard extends StatelessWidget {
       case 'perdido':
         return AppColors.error;
       default:
-        return AppColors.onSurface.withOpacity(0.7);
+        return AppColors.onSurface.withAlpha((0.7 * 255).toInt());
     }
   }
 } 

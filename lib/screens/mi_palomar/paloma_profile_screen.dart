@@ -3,7 +3,6 @@ import 'package:provider/provider.dart';
 import '../../models/paloma.dart';
 import '../../providers/reproduccion_provider.dart';
 import '../../providers/captura_provider.dart';
-import '../../providers/transaccion_comercial_provider.dart';
 import '../../providers/tratamiento_provider.dart';
 import '../../constants/app_colors.dart';
 import '../../constants/app_text_styles.dart';

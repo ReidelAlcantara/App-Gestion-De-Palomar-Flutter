@@ -10,7 +10,7 @@ class ManualUsuarioScreen extends StatelessWidget {
       body: ListView(
         children: [
           ExpansionTile(
-            title: Text('Introducción'),
+            title: Row(children: [Icon(Icons.info_outline, color: Colors.blue), SizedBox(width: 8), Text('Introducción')]),
             children: [
               Padding(
                 padding: EdgeInsets.all(16.0),
@@ -21,7 +21,7 @@ class ManualUsuarioScreen extends StatelessWidget {
             ],
           ),
           ExpansionTile(
-            title: Text('Primeros pasos'),
+            title: Row(children: [Icon(Icons.flag, color: Colors.green), SizedBox(width: 8), Text('Primeros pasos')]),
             children: [
               Padding(
                 padding: EdgeInsets.all(16.0),
@@ -42,7 +42,7 @@ class ManualUsuarioScreen extends StatelessWidget {
             ],
           ),
           ExpansionTile(
-            title: Text('Gestión de palomas'),
+            title: Row(children: [Icon(Icons.pets, color: Colors.deepPurple), SizedBox(width: 8), Text('Gestión de palomas')]),
             children: [
               Padding(
                 padding: EdgeInsets.all(16.0),
@@ -64,7 +64,7 @@ class ManualUsuarioScreen extends StatelessWidget {
             ],
           ),
           ExpansionTile(
-            title: Text('Reproducción y cría'),
+            title: Row(children: [Icon(Icons.favorite, color: Colors.pink), SizedBox(width: 8), Text('Reproducción y cría')]),
             children: [
               Padding(
                 padding: EdgeInsets.all(16.0),
@@ -86,7 +86,7 @@ class ManualUsuarioScreen extends StatelessWidget {
             ],
           ),
           ExpansionTile(
-            title: Text('Tratamientos y salud'),
+            title: Row(children: [Icon(Icons.medical_services, color: Colors.red), SizedBox(width: 8), Text('Tratamientos y salud')]),
             children: [
               Padding(
                 padding: EdgeInsets.all(16.0),
@@ -108,7 +108,7 @@ class ManualUsuarioScreen extends StatelessWidget {
             ],
           ),
           ExpansionTile(
-            title: Text('Finanzas y transacciones'),
+            title: Row(children: [Icon(Icons.account_balance_wallet, color: Colors.teal), SizedBox(width: 8), Text('Finanzas y transacciones')]),
             children: [
               Padding(
                 padding: EdgeInsets.all(16.0),
@@ -130,7 +130,7 @@ class ManualUsuarioScreen extends StatelessWidget {
             ],
           ),
           ExpansionTile(
-            title: Text('Capturas y competencias'),
+            title: Row(children: [Icon(Icons.emoji_events, color: Colors.orange), SizedBox(width: 8), Text('Capturas y competencias')]),
             children: [
               Padding(
                 padding: EdgeInsets.all(16.0),
@@ -150,7 +150,7 @@ class ManualUsuarioScreen extends StatelessWidget {
             ],
           ),
           ExpansionTile(
-            title: Text('Estadísticas y reportes'),
+            title: Row(children: [Icon(Icons.bar_chart, color: Colors.indigo), SizedBox(width: 8), Text('Estadísticas y reportes')]),
             children: [
               Padding(
                 padding: EdgeInsets.all(16.0),
@@ -168,7 +168,7 @@ class ManualUsuarioScreen extends StatelessWidget {
             ],
           ),
           ExpansionTile(
-            title: Text('Configuración y personalización'),
+            title: Row(children: [Icon(Icons.settings, color: Colors.grey), SizedBox(width: 8), Text('Configuración y personalización')]),
             children: [
               Padding(
                 padding: EdgeInsets.all(16.0),
@@ -189,7 +189,7 @@ class ManualUsuarioScreen extends StatelessWidget {
             ],
           ),
           ExpansionTile(
-            title: Text('Preguntas frecuentes (FAQ)'),
+            title: Row(children: [Icon(Icons.help_outline, color: Colors.amber), SizedBox(width: 8), Text('Preguntas frecuentes (FAQ)')]),
             children: [
               Padding(
                 padding: EdgeInsets.all(16.0),
@@ -210,7 +210,7 @@ class ManualUsuarioScreen extends StatelessWidget {
             ],
           ),
           ExpansionTile(
-            title: Text('Soporte y contacto'),
+            title: Row(children: [Icon(Icons.support_agent, color: Colors.blueGrey), SizedBox(width: 8), Text('Soporte y contacto')]),
             children: [
               Padding(
                 padding: EdgeInsets.all(16.0),

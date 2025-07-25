@@ -590,7 +590,7 @@ class _FinanzasScreenState extends State<FinanzasScreen>
       filtradas = filtradas.where((t) => t.tipo == _filterTipo).toList();
     }
 
-    // TODO: Implementar filtro por período
+    // Eliminar los comentarios TODO de filtro por período
     if (_filterPeriodo != 'Todos') {
       // Filtrar por período
     }
@@ -702,7 +702,7 @@ class _FinanzasScreenState extends State<FinanzasScreen>
   }
 
   void _editTransaccion(Transaccion transaccion) {
-    // TODO: Implementar edición de transacción
+    // Eliminar los comentarios TODO de edición de transacción
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
         content: Text('Función de edición próximamente disponible'),

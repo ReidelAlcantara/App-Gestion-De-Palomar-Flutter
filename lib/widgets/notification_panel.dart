@@ -20,7 +20,7 @@ class NotificationPanel extends StatelessWidget {
         borderRadius: BorderRadius.circular(12),
         boxShadow: [
           BoxShadow(
-            color: AppColors.border.withOpacity(0.2),
+            color: AppColors.border.withAlpha((0.2 * 255).toInt()),
             blurRadius: 10,
             offset: const Offset(0, 5),
           ),
@@ -46,7 +46,7 @@ class NotificationPanel extends StatelessWidget {
                   'Notificaciones',
                   style: AppTextStyles.h6.copyWith(
                     color: AppColors.onPrimary,
-                    fontSize: AppTextStyles.h6.fontSize! * MediaQuery.textScaleFactorOf(context),
+                    fontSize: MediaQuery.textScalerOf(context).scale(AppTextStyles.h6.fontSize!),
                   ),
                 ),
                 Row(
@@ -153,7 +153,7 @@ class NotificationPanel extends StatelessWidget {
                     return Text(
                       '$totalCount notificaciones',
                       style: AppTextStyles.bodySmall.copyWith(
-                        color: AppColors.onSurface.withOpacity(0.7),
+                        color: AppColors.onSurface.withAlpha((0.7 * 255).toInt()),
                       ),
                     );
                   },
@@ -195,12 +195,12 @@ class _NotificationItem extends StatelessWidget {
       margin: const EdgeInsets.symmetric(vertical: 4),
       color: notification.read
           ? AppColors.surface
-          : AppColors.primary.withOpacity(0.1),
+          : AppColors.primary.withAlpha((0.1 * 255).toInt()),
       child: ListTile(
         leading: Container(
           padding: const EdgeInsets.all(8),
           decoration: BoxDecoration(
-            color: notification.type.color.withOpacity(0.2),
+            color: notification.type.color.withAlpha((0.2 * 255).toInt()),
             borderRadius: BorderRadius.circular(8),
           ),
           child: Icon(
@@ -213,7 +213,7 @@ class _NotificationItem extends StatelessWidget {
           notification.title,
           style: AppTextStyles.bodyMedium.copyWith(
             fontWeight: notification.read ? FontWeight.normal : FontWeight.bold,
-            fontSize: AppTextStyles.bodyMedium.fontSize! * MediaQuery.textScaleFactorOf(context),
+            fontSize: MediaQuery.textScalerOf(context).scale(AppTextStyles.bodyMedium.fontSize!),
           ),
         ),
         subtitle: Column(
@@ -222,7 +222,7 @@ class _NotificationItem extends StatelessWidget {
             Text(
               notification.message,
               style: AppTextStyles.bodySmall.copyWith(
-                color: AppColors.onSurface.withOpacity(0.85), // Mejor contraste
+                color: AppColors.onSurface.withAlpha((0.85 * 255).toInt()), // Mejor contraste
               ),
               maxLines: 2,
               overflow: TextOverflow.ellipsis,
@@ -231,7 +231,7 @@ class _NotificationItem extends StatelessWidget {
             Text(
               _formatTime(notification.timestamp),
               style: AppTextStyles.labelSmall.copyWith(
-                color: AppColors.onSurface.withOpacity(0.5),
+                color: AppColors.onSurface.withAlpha((0.5 * 255).toInt()),
               ),
             ),
           ],

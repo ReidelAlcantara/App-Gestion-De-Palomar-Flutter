@@ -23,7 +23,7 @@ class _CompetenciaFormState extends State<CompetenciaForm> {
   final _premioController = TextEditingController();
 
   String _estado = 'Activa';
-  String _categoria = 'Velocidad';
+  late final String _categoria = 'Velocidad';
   DateTime _fechaInicio = DateTime.now();
   DateTime _fechaFin = DateTime.now().add(const Duration(days: 7));
   bool _isEditing = false;

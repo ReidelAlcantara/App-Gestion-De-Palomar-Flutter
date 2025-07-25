@@ -350,7 +350,7 @@ class _CapturaFormState extends State<CapturaForm> {
                       TextFormField(
                         controller: _palomaNombreController,
                         decoration: InputDecoration(
-                          labelText: 'Paloma requerida',
+                          labelText: 'Paloma capturada',
                           border: const OutlineInputBorder(),
                           focusedBorder: OutlineInputBorder(
                             borderSide: BorderSide(color: Colors.deepPurple, width: 2.5),
@@ -450,7 +450,7 @@ class _CapturaFormState extends State<CapturaForm> {
                           ElevatedButton.icon(
                             onPressed: _isLoading ? null : _pickFotoPrincipal,
                             icon: const Icon(Icons.camera_alt),
-                            label: Text('Ruta de la foto (opcional)'),
+                            label: Text('Ruta de la foto paloma capturada (opcional)'),
                           ),
                           if (_fotoPrincipal != null) ...[
                             const SizedBox(width: 8),
@@ -468,7 +468,7 @@ class _CapturaFormState extends State<CapturaForm> {
                           ElevatedButton.icon(
                             onPressed: _isLoading ? null : _pickFotosProceso,
                             icon: const Icon(Icons.photo_library),
-                            label: Text('Biblioteca de fotos'),
+                            label: Text('Fotos faena de captura (opcional)'),
                           ),
                           if (_fotosProceso.isNotEmpty) ...[
                             const SizedBox(width: 8),
@@ -532,9 +532,9 @@ class _CapturaFormState extends State<CapturaForm> {
                         Container(
                           padding: const EdgeInsets.all(12),
                           decoration: BoxDecoration(
-                            color: AppColors.error.withOpacity(0.1),
+                            color: AppColors.error.withAlpha((0.1 * 255).toInt()),
                             borderRadius: BorderRadius.circular(8),
-                            border: Border.all(color: AppColors.error.withOpacity(0.3)),
+                            border: Border.all(color: AppColors.error.withAlpha((0.3 * 255).toInt())),
                           ),
                           child: Row(
                             children: [

@@ -1,4 +1,3 @@
-import 'package:flutter/foundation.dart';
 import '../models/transaccion_comercial.dart';
 import '../services/storage_service.dart';
 import 'package:provider/provider.dart';
@@ -6,6 +5,7 @@ import 'estadistica_provider.dart';
 import 'package:flutter/material.dart';
 import 'base_provider.dart';
 import '../constants/app_errors.dart';
+import 'package:hive/hive.dart';
 
 class TransaccionComercialProvider extends BaseProvider {
   List<TransaccionComercial> _transacciones = [];
@@ -31,6 +31,21 @@ class TransaccionComercialProvider extends BaseProvider {
     await loadTransacciones();
   }
 
+  // Método para borrar todos los datos de compra/venta
+  Future<void> clearAllTransacciones() async {
+    await _clearTransaccionesComercialesHive();
+    _transacciones.clear();
+    await _saveTransacciones();
+    notifyListeners();
+    await loadTransacciones();
+  }
+
+  // Borrado físico de la base de datos Hive
+  Future<void> _clearTransaccionesComercialesHive() async {
+    final box = await Hive.openBox('transaccionesComercialesBox');
+    await box.clear();
+  }
+
   // Cargar transacciones desde almacenamiento
   Future<void> loadTransacciones() async {
     try {
@@ -39,8 +54,7 @@ class TransaccionComercialProvider extends BaseProvider {
 
       final data = await StorageService.getTransaccionesComerciales();
       if (data.isEmpty) {
-        // Cargar datos de ejemplo si no hay datos
-        await _loadExampleData();
+        _transacciones.clear();
       } else {
         _transacciones = data.map((json) => TransaccionComercial.fromJson(json)).toList();
       }
@@ -50,56 +64,6 @@ class TransaccionComercialProvider extends BaseProvider {
       setLoading(false);
       setError('${AppErrors.cargarTransacciones}: $e');
     }
-  }
-
-  // Cargar datos de ejemplo
-  Future<void> _loadExampleData() async {
-    final exampleData = [
-      TransaccionComercial(
-        id: '1',
-        tipoItem: TipoItem.paloma,
-        nombreItem: 'Veloz',
-        descripcionItem: null,
-        cantidad: null,
-        unidad: null,
-        precio: 100.0,
-        fecha: DateTime.now().subtract(const Duration(days: 5)),
-        tipo: 'Compra',
-        compradorVendedor: 'Juan',
-        observaciones: 'Ejemplo de compra de paloma',
-        estado: 'Pendiente',
-      ),
-      TransaccionComercial(
-        id: '2',
-        tipoItem: TipoItem.comida,
-        nombreItem: 'Saco de maíz',
-        descripcionItem: 'Comida premium',
-        cantidad: 25.0,
-        unidad: 'kg',
-        precio: 50.0,
-        fecha: DateTime.now().subtract(const Duration(days: 2)),
-        tipo: 'Compra',
-        compradorVendedor: 'Alimentos S.A.',
-        observaciones: null,
-        estado: 'Completada',
-      ),
-      TransaccionComercial(
-        id: '3',
-        tipoItem: TipoItem.articulo,
-        nombreItem: 'Bebedero',
-        descripcionItem: 'Bebedero automático',
-        cantidad: 2.0,
-        unidad: 'unidades',
-        precio: 30.0,
-        fecha: DateTime.now().subtract(const Duration(days: 10)),
-        tipo: 'Venta',
-        compradorVendedor: 'Pedro',
-        observaciones: 'Venta de artículo',
-        estado: 'Pendiente',
-      ),
-    ];
-    _transacciones = exampleData;
-    await _saveTransacciones();
   }
 
   // Guardar transacciones en almacenamiento

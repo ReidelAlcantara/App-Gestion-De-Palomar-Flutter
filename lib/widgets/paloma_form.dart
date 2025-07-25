@@ -367,7 +367,7 @@ class _PalomaFormState extends State<PalomaForm> {
                         style: _fechaNacimiento != null
                             ? AppTextStyles.bodyMedium
                             : AppTextStyles.bodyMedium.copyWith(
-                                color: AppColors.onSurface.withOpacity(0.5),
+                                color: AppColors.onSurface.withAlpha((0.5 * 255).toInt()),
                               ),
                       ),
                     ),

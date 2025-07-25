@@ -47,14 +47,14 @@ class _RegistroInicialScreenState extends State<RegistroInicialScreen> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  'Configura tu Loft',
+                  'Configura tu Palomar',
                   style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold, color: Colors.blue),
                 ),
                 const SizedBox(height: 24),
                 TextFormField(
                   controller: _palomarController,
                   decoration: InputDecoration(
-                    labelText: 'Nombre del Loft (opcional)',
+                    labelText: 'Nombre del Palomar (opcional)',
                     border: const OutlineInputBorder(),
                     prefixIcon: const Icon(Icons.home),
                   ),

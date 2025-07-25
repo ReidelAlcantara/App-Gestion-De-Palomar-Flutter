@@ -37,7 +37,7 @@ class TransaccionCard extends StatelessWidget {
                 Container(
                   padding: const EdgeInsets.all(12),
                   decoration: BoxDecoration(
-                    color: color.withOpacity(0.1),
+                    color: color.withAlpha((0.1 * 255).toInt()),
                     borderRadius: BorderRadius.circular(12),
                   ),
                   child: Icon(
@@ -65,9 +65,9 @@ class TransaccionCard extends StatelessWidget {
                           Container(
                             padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
                             decoration: BoxDecoration(
-                              color: color.withOpacity(0.1),
+                              color: color.withAlpha((0.1 * 255).toInt()),
                               borderRadius: BorderRadius.circular(8),
-                              border: Border.all(color: color.withOpacity(0.3)),
+                              border: Border.all(color: color.withAlpha((0.3 * 255).toInt())),
                             ),
                             child: Text(
                               transaccion.tipo,

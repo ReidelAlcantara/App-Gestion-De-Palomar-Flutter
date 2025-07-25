@@ -172,7 +172,7 @@ class TransaccionComercialCard extends StatelessWidget {
                 if (transaccion.cantidad != null && transaccion.unidad != null)
                   Text(
                     '${transaccion.cantidad} ${transaccion.unidad}',
-                    style: AppTextStyles.bodySmall.copyWith(color: AppColors.onSurface.withOpacity(0.7)),
+                    style: AppTextStyles.bodySmall.copyWith(color: AppColors.onSurface.withAlpha(179)),
                   ),
               ],
             ),
@@ -228,7 +228,7 @@ class TransaccionComercialCard extends StatelessWidget {
                   child: Text(
                     transaccion.esCompra ? 'Vendedor' : 'Comprador',
                     style: AppTextStyles.bodySmall.copyWith(
-                      color: AppColors.onSurface.withOpacity(0.7),
+                      color: AppColors.onSurface.withAlpha(179),
                     ),
                   ),
                 ),
@@ -252,13 +252,13 @@ class TransaccionComercialCard extends StatelessWidget {
                 Icon(
                   Icons.calendar_today,
                   size: 20,
-                  color: AppColors.onSurface.withOpacity(0.7),
+                  color: AppColors.onSurface.withAlpha(179),
                 ),
                 const SizedBox(width: 8),
                 Text(
                   transaccion.fechaFormateada,
                   style: AppTextStyles.bodySmall.copyWith(
-                    color: AppColors.onSurface.withOpacity(0.7),
+                    color: AppColors.onSurface.withAlpha(179),
                   ),
                 ),
               ],
@@ -274,14 +274,14 @@ class TransaccionComercialCard extends StatelessWidget {
                   Icon(
                     Icons.note,
                     size: 20,
-                    color: AppColors.onSurface.withOpacity(0.7),
+                    color: AppColors.onSurface.withAlpha(179),
                   ),
                   const SizedBox(width: 8),
                   Expanded(
                     child: Text(
                       transaccion.observaciones!,
                       style: AppTextStyles.bodySmall.copyWith(
-                        color: AppColors.onSurface.withOpacity(0.8),
+                        color: AppColors.onSurface.withAlpha(192),
                         fontStyle: FontStyle.italic,
                       ),
                     ),
@@ -326,17 +326,17 @@ class TransaccionComercialCard extends StatelessWidget {
       case 'Cancelada':
         return AppColors.error;
       default:
-        return AppColors.onSurface.withOpacity(0.3);
+        return AppColors.onSurface.withAlpha(77);
     }
   }
 
   Color _getBorderColor() {
     if (transaccion.esPendiente) {
-      return AppColors.warning.withOpacity(0.3);
+      return AppColors.warning.withAlpha(77);
     } else if (transaccion.esCompletada) {
-      return AppColors.success.withOpacity(0.3);
+      return AppColors.success.withAlpha(77);
     } else if (transaccion.esCancelada) {
-      return AppColors.error.withOpacity(0.3);
+      return AppColors.error.withAlpha(77);
     }
     return AppColors.border;
   }

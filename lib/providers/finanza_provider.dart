@@ -1,4 +1,3 @@
-import 'package:flutter/foundation.dart';
 import '../models/transaccion.dart';
 import '../services/storage_service.dart';
 import 'package:flutter/material.dart';
@@ -37,7 +36,6 @@ class FinanzaProvider extends BaseProvider {
       clearError();
     } catch (e) {
       setError('${AppErrors.cargarTransacciones}: $e');
-      print('Error loading transacciones: $e');
     } finally {
       setLoading(false);
     }
@@ -50,7 +48,6 @@ class FinanzaProvider extends BaseProvider {
       await storageService.saveTransacciones(transaccionesData);
     } catch (e) {
       setError('${AppErrors.guardarTransacciones}: $e');
-      print('Error saving transacciones: $e');
     }
   }
 
@@ -65,7 +62,6 @@ class FinanzaProvider extends BaseProvider {
       }
     } catch (e) {
       setError('${AppErrors.agregarTransaccion}: $e');
-      print('Error adding transaccion: $e');
     }
   }
 
@@ -83,7 +79,6 @@ class FinanzaProvider extends BaseProvider {
       }
     } catch (e) {
       setError('${AppErrors.actualizarTransaccion}: $e');
-      print('Error updating transaccion: $e');
     }
   }
 
@@ -98,7 +93,6 @@ class FinanzaProvider extends BaseProvider {
       }
     } catch (e) {
       setError('${AppErrors.eliminarTransaccion}: $e');
-      print('Error deleting transaccion: $e');
     }
   }
 

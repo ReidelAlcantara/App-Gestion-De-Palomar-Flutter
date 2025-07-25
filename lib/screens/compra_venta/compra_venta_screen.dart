@@ -52,6 +52,35 @@ class _CompraVentaScreenState extends State<CompraVentaScreen>
               _showFilterDialog();
             },
           ),
+          IconButton(
+            icon: const Icon(Icons.delete_forever),
+            tooltip: 'Borrar todas las transacciones',
+            onPressed: () async {
+              final provider = Provider.of<TransaccionComercialProvider>(context, listen: false);
+              final confirm = await showDialog<bool>(
+                context: context,
+                builder: (context) => AlertDialog(
+                  title: const Text('Borrar todas las transacciones'),
+                  content: const Text('¿Estás seguro de que deseas borrar todas las transacciones? Esta acción no se puede deshacer.'),
+                  actions: [
+                    TextButton(
+                      onPressed: () => Navigator.pop(context, false),
+                      child: const Text('Cancelar'),
+                    ),
+                    ElevatedButton(
+                      onPressed: () => Navigator.pop(context, true),
+                      child: const Text('Borrar todo'),
+                    ),
+                  ],
+                ),
+              );
+              if (confirm == true) {
+                await provider.clearAllTransacciones();
+                // Forzar refresco visual
+                if (mounted) setState(() {});
+              }
+            },
+          ),
         ],
         bottom: TabBar(
           controller: _tabController,

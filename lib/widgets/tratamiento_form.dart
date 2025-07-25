@@ -1,12 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../models/paloma.dart';
-import '../providers/tratamiento_provider.dart';
+import '../models/tratamiento.dart';
 import '../providers/paloma_provider.dart';
 // import 'package:flutter_gen/gen_l10n/app_localizations.dart'; // i18n futuro
 
 class TratamientoForm extends StatefulWidget {
-  const TratamientoForm({super.key});
+  final Tratamiento? tratamiento;
+  const TratamientoForm({super.key, this.tratamiento});
 
   @override
   State<TratamientoForm> createState() => _TratamientoFormState();
@@ -23,17 +24,9 @@ class _TratamientoFormState extends State<TratamientoForm> {
 
   Paloma? _selectedPaloma;
   String _selectedTipo = 'Preventivo';
-  bool _isLoading = false;
 
   DateTime _fechaInicio = DateTime.now();
   DateTime? _fechaFin;
-
-  final List<String> _tipos = [
-    'Preventivo',
-    'Curativo',
-    'Vacunación',
-    'Desparasitación',
-  ];
 
   @override
   void dispose() {
@@ -44,72 +37,6 @@ class _TratamientoFormState extends State<TratamientoForm> {
     _frecuenciaController.dispose();
     _observacionesController.dispose();
     super.dispose();
-  }
-
-  void _createTratamiento() async {
-    if (_formKey.currentState!.validate()) {
-      if (_selectedPaloma == null) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text('Debes seleccionar una paloma')),
-        );
-        return;
-      }
-      if (_fechaFin != null && _fechaFin!.isBefore(_fechaInicio)) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text('La fecha de fin no puede ser anterior a la de inicio')),
-        );
-        return;
-      }
-
-      setState(() {
-        _isLoading = true;
-      });
-
-      try {
-        final tratamientoProvider = context.read<TratamientoProvider>();
-
-        final tratamiento = tratamientoProvider.createTratamiento(
-          palomaId: _selectedPaloma!.id,
-          palomaNombre: _selectedPaloma!.nombre,
-          tipo: _selectedTipo,
-          nombre: _nombreController.text.trim(),
-          descripcion: _descripcionController.text.trim(),
-          medicamento: _medicamentoController.text.trim().isEmpty
-              ? null
-              : _medicamentoController.text.trim(),
-          dosis: _dosisController.text.trim().isEmpty
-              ? null
-              : _dosisController.text.trim(),
-          frecuencia: _frecuenciaController.text.trim().isEmpty
-              ? null
-              : _frecuenciaController.text.trim(),
-          observaciones: _observacionesController.text.trim().isEmpty
-              ? null
-              : _observacionesController.text.trim(),
-          fechaInicio: _fechaInicio,
-          fechaFin: _fechaFin,
-        );
-
-        await tratamientoProvider.addTratamiento(tratamiento);
-
-        if (mounted) {
-          Navigator.of(context).pop();
-          ScaffoldMessenger.of(context).showSnackBar(
-            const SnackBar(content: Text('Tratamiento creado exitosamente')),
-          );
-        }
-      } catch (e) {
-        if (mounted) {
-          ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(content: Text('Error al crear tratamiento: $e')),
-          );
-        }
-      } finally {
-        setState(() {
-          _isLoading = false;
-        });
-      }
-    }
   }
 
   @override
@@ -255,12 +182,12 @@ class _TratamientoFormState extends State<TratamientoForm> {
                               prefixIcon: const Icon(Icons.category),
                             ),
                             value: _selectedTipo,
-                            items: _tipos
-                                .map((tipo) => DropdownMenuItem(
-                                      value: tipo,
-                                      child: Text(tipo),
-                                    ))
-                                .toList(),
+                            items: const [
+                              DropdownMenuItem(value: 'Preventivo', child: Text('Preventivo')),
+                              DropdownMenuItem(value: 'Curativo', child: Text('Curativo')),
+                              DropdownMenuItem(value: 'Vacunación', child: Text('Vacunación')),
+                              DropdownMenuItem(value: 'Desparasitación', child: Text('Desparasitación')),
+                            ],
                             onChanged: (value) {
                               setState(() {
                                 _selectedTipo = value!;

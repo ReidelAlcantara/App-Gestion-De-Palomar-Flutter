@@ -110,7 +110,7 @@ class CapturaCard extends StatelessWidget {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Text('Seductor', style: AppTextStyles.bodySmall.copyWith(color: AppColors.onSurface.withOpacity(0.7))),
+                        Text('Seductor', style: AppTextStyles.bodySmall.copyWith(color: AppColors.onSurface.withAlpha(179))),
                         Text(captura.seductorNombre, style: AppTextStyles.bodyMedium.copyWith(fontWeight: FontWeight.w500)),
                       ],
                     ),
@@ -126,7 +126,7 @@ class CapturaCard extends StatelessWidget {
                           builder: (_) => PalomaProfileScreen(paloma: seductor!),
                         )),
                         key: const Key('ver_perfil_seductor'),
-                        focusColor: Colors.blue.withOpacity(0.2),
+                        focusColor: Colors.blue.withAlpha(51),
                         splashRadius: 24,
                         enableFeedback: true,
                       ),
@@ -137,11 +137,11 @@ class CapturaCard extends StatelessWidget {
               // Fecha y observaciones
               Row(
                 children: [
-                  Icon(Icons.calendar_today, size: 20, color: AppColors.onSurface.withOpacity(0.7)),
+                  Icon(Icons.calendar_today, size: 20, color: AppColors.onSurface.withAlpha(179)),
                   const SizedBox(width: 8),
-                  Text(captura.fechaFormateada, style: AppTextStyles.bodySmall.copyWith(color: AppColors.onSurface.withOpacity(0.85))),
+                  Text(captura.fechaFormateada, style: AppTextStyles.bodySmall.copyWith(color: AppColors.onSurface.withAlpha(218))),
                   const Spacer(),
-                  Text(captura.textoDias, style: AppTextStyles.bodySmall.copyWith(color: AppColors.onSurface.withOpacity(0.85), fontStyle: FontStyle.italic)),
+                  Text(captura.textoDias, style: AppTextStyles.bodySmall.copyWith(color: AppColors.onSurface.withAlpha(218), fontStyle: FontStyle.italic)),
                 ],
               ),
               if (captura.observaciones != null && captura.observaciones!.isNotEmpty) ...[
@@ -149,12 +149,12 @@ class CapturaCard extends StatelessWidget {
                 Row(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Icon(Icons.note, size: 20, color: AppColors.onSurface.withOpacity(0.7)),
+                    Icon(Icons.note, size: 20, color: AppColors.onSurface.withAlpha(179)),
                     const SizedBox(width: 8),
                     Expanded(
                       child: Text(
                         captura.observaciones!,
-                        style: AppTextStyles.bodySmall.copyWith(color: AppColors.onSurface.withOpacity(0.9), fontStyle: FontStyle.italic),
+                        style: AppTextStyles.bodySmall.copyWith(color: AppColors.onSurface.withAlpha(230), fontStyle: FontStyle.italic),
                       ),
                     ),
                   ],
@@ -165,13 +165,13 @@ class CapturaCard extends StatelessWidget {
                 Row(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Icon(Icons.person, size: 20, color: AppColors.onSurface.withOpacity(0.7)),
+                    Icon(Icons.person, size: 20, color: AppColors.onSurface.withAlpha(179)),
                     const SizedBox(width: 8),
                     Expanded(
                       child: Text(
                         'Dueño: ${captura.dueno}',
                         style: AppTextStyles.bodySmall.copyWith(
-                          color: AppColors.onSurface.withOpacity(0.8),
+                          color: AppColors.onSurface.withAlpha(204),
                           fontStyle: FontStyle.italic,
                         ),
                       ),
@@ -214,39 +214,13 @@ class CapturaCard extends StatelessWidget {
     );
   }
 
-  Color _getStatusColor() {
-    switch (captura.estado) {
-      case 'Pendiente':
-        return AppColors.warning;
-      case 'Confirmada':
-        return AppColors.success;
-      case 'Rechazada':
-        return AppColors.error;
-      default:
-        return AppColors.onSurface.withOpacity(0.3);
-    }
-  }
-
-  IconData _getStatusIcon() {
-    switch (captura.estado) {
-      case 'Pendiente':
-        return Icons.schedule;
-      case 'Confirmada':
-        return Icons.check_circle;
-      case 'Rechazada':
-        return Icons.cancel;
-      default:
-        return Icons.help;
-    }
-  }
-
   Color _getBorderColor() {
     if (captura.esPendiente) {
-      return AppColors.warning.withOpacity(0.3);
+      return AppColors.warning.withAlpha(77);
     } else if (captura.esConfirmada) {
-      return AppColors.success.withOpacity(0.3);
+      return AppColors.success.withAlpha(77);
     } else if (captura.esRechazada) {
-      return AppColors.error.withOpacity(0.3);
+      return AppColors.error.withAlpha(77);
     }
     return AppColors.border;
   }

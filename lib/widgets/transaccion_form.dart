@@ -5,7 +5,6 @@ import '../constants/app_colors.dart';
 import '../constants/app_text_styles.dart';
 import 'package:provider/provider.dart';
 import '../providers/categoria_financiera_provider.dart';
-import '../models/categoria_financiera.dart';
 // import 'package:flutter_gen/gen_l10n/app_localizations.dart'; // i18n futuro
 
 class TransaccionForm extends StatefulWidget {
@@ -26,26 +25,6 @@ class _TransaccionFormState extends State<TransaccionForm> {
 
   final List<String> _tipos = ['Ingreso', 'Gasto'];
   
-  final List<String> _categoriasIngreso = [
-    'Venta de palomas',
-    'Premios',
-    'Donaciones',
-    'Otros ingresos'
-  ];
-  
-  final List<String> _categoriasGasto = [
-    'Alimentación',
-    'Medicamentos',
-    'Equipamiento',
-    'Veterinario',
-    'Transporte',
-    'Otros gastos'
-  ];
-
-  List<String> get _categoriasDisponibles {
-    return _tipo == 'Ingreso' ? _categoriasIngreso : _categoriasGasto;
-  }
-
   @override
   Widget build(BuildContext context) {
     final categoriasProvider = Provider.of<CategoriaFinancieraProvider>(context);
@@ -55,56 +34,53 @@ class _TransaccionFormState extends State<TransaccionForm> {
         header: true,
         child: Text('Registrar transacción', style: AppTextStyles.h5),
       ),
-      content: Center(
-        child: ConstrainedBox(
-          constraints: const BoxConstraints(maxWidth: 500),
-          child: FocusTraversalGroup(
-            child: SingleChildScrollView(
-              child: Form(
-                key: _formKey,
-                child: Column(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    // Descripción
-                    Semantics(
-                      label: 'Descripción de la transacción',
-                      child: Focus(
-                        child: TextFormField(
-                          decoration: InputDecoration(
-                            labelText: 'Descripción',
-                            prefixIcon: const Icon(Icons.description),
-                            focusedBorder: OutlineInputBorder(
-                              borderSide: BorderSide(color: Theme.of(context).colorScheme.primary, width: 2),
-                            ),
-                            border: const OutlineInputBorder(),
+      content: ConstrainedBox(
+        constraints: const BoxConstraints(maxWidth: 500),
+        child: FocusTraversalGroup(
+          child: SingleChildScrollView(
+            child: Form(
+              key: _formKey,
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  // Descripción
+                  Semantics(
+                    label: 'Descripción de la transacción',
+                    child: Focus(
+                      child: TextFormField(
+                        decoration: InputDecoration(
+                          labelText: 'Descripción',
+                          prefixIcon: const Icon(Icons.description),
+                          focusedBorder: OutlineInputBorder(
+                            borderSide: BorderSide(color: Theme.of(context).colorScheme.primary, width: 2),
                           ),
-                          onChanged: (value) => setState(() => _descripcion = value),
-                          validator: (value) => value == null || value.isEmpty ? 'Ingrese una descripción' : null,
+                          border: const OutlineInputBorder(),
                         ),
+                        onChanged: (value) => setState(() => _descripcion = value),
+                        validator: (value) => value == null || value.isEmpty ? 'Ingrese una descripción' : null,
                       ),
                     ),
-                    const SizedBox(height: 16),
-                    // Tipo
-                    Semantics(
-                      label: 'Tipo de transacción',
-                      child: Focus(
-                        child: DropdownButtonFormField<String>(
-                          value: _tipo,
-                          decoration: const InputDecoration(
-                            labelText: 'Tipo',
-                            border: OutlineInputBorder(),
-                          ),
-                          items: _tipos.map((tipo) => DropdownMenuItem(
-                            value: tipo,
-                            child: Text(tipo),
-                          )).toList(),
-                          onChanged: (value) => setState(() => _tipo = value ?? 'Gasto'),
-                        ),
-                      ),
-                    ),
-              
+                  ),
                   const SizedBox(height: 16),
-              
+                  // Tipo
+                  Semantics(
+                    label: 'Tipo de transacción',
+                    child: Focus(
+                      child: DropdownButtonFormField<String>(
+                        value: _tipo,
+                        decoration: const InputDecoration(
+                          labelText: 'Tipo',
+                          border: OutlineInputBorder(),
+                        ),
+                        items: _tipos.map((tipo) => DropdownMenuItem(
+                          value: tipo,
+                          child: Text(tipo),
+                        )).toList(),
+                        onChanged: (value) => setState(() => _tipo = value ?? 'Gasto'),
+                      ),
+                    ),
+                  ),
+                  const SizedBox(height: 16),
                   // Monto
                   TextFormField(
                     decoration: InputDecoration(
@@ -130,9 +106,7 @@ class _TransaccionFormState extends State<TransaccionForm> {
                       return null;
                     },
                   ),
-              
                   const SizedBox(height: 16),
-              
                   // Categoría personalizada
                   DropdownButtonFormField<String>(
                     value: _categoria.isEmpty ? null : _categoria,
@@ -165,9 +139,7 @@ class _TransaccionFormState extends State<TransaccionForm> {
                       return null;
                     },
                   ),
-              
                   const SizedBox(height: 16),
-              
                   // Fecha
                   InkWell(
                     onTap: () async {
@@ -194,9 +166,7 @@ class _TransaccionFormState extends State<TransaccionForm> {
                       ),
                     ),
                   ),
-              
                   const SizedBox(height: 16),
-              
                   // Notas
                   TextFormField(
                     decoration: InputDecoration(
@@ -209,9 +179,7 @@ class _TransaccionFormState extends State<TransaccionForm> {
                       _notas = value;
                     },
                   ),
-              
                   const SizedBox(height: 16),
-              
                   // Resumen de la transacción
                   Container(
                     padding: const EdgeInsets.all(12),
@@ -278,7 +246,7 @@ class _TransaccionFormState extends State<TransaccionForm> {
         ),
         ElevatedButton(
           onPressed: _submitForm,
-          child: Text(widget.transaccion != null ? 'Actualizar' : 'Guardar'),
+          child: Text('Guardar'),
         ),
       ],
     );

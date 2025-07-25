@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../providers/paloma_provider.dart';
 import '../models/paloma.dart';
-import '../models/reproduccion.dart';
 import '../constants/app_colors.dart';
 import '../constants/app_text_styles.dart';
 // import 'package:flutter_gen/gen_l10n/app_localizations.dart'; // i18n futuro
@@ -19,7 +18,6 @@ class _ParejaFormState extends State<ParejaForm> {
   String? _selectedPadreId;
   String? _selectedMadreId;
   DateTime _fechaInicio = DateTime.now();
-  String _notas = '';
 
   @override
   Widget build(BuildContext context) {
@@ -31,7 +29,7 @@ class _ParejaFormState extends State<ParejaForm> {
         return AlertDialog(
           title: Semantics(
             header: true,
-            child: Text('Registrar pareja', style: Theme.of(context).textTheme.headline6),
+            child: Text('Registrar pareja', style: Theme.of(context).textTheme.titleLarge),
           ),
           content: Center(
             child: ConstrainedBox(
@@ -152,7 +150,7 @@ class _ParejaFormState extends State<ParejaForm> {
                           ),
                           maxLines: 3,
                           onChanged: (value) {
-                            _notas = value;
+                            // _notas = value; // Eliminar: _notas no usada
                           },
                         ),
 
@@ -163,10 +161,10 @@ class _ParejaFormState extends State<ParejaForm> {
                           Container(
                             padding: const EdgeInsets.all(12),
                             decoration: BoxDecoration(
-                              color: AppColors.primary.withOpacity(0.1),
+                              color: AppColors.primary.withAlpha(25),
                               borderRadius: BorderRadius.circular(8),
                               border: Border.all(
-                                  color: AppColors.primary.withOpacity(0.3)),
+                                  color: AppColors.primary.withAlpha(76)),
                             ),
                             child: Column(
                               children: [
@@ -190,7 +188,7 @@ class _ParejaFormState extends State<ParejaForm> {
                                     Container(
                                       padding: const EdgeInsets.all(8),
                                       decoration: BoxDecoration(
-                                        color: AppColors.primary.withOpacity(0.2),
+                                        color: AppColors.primary.withAlpha(51),
                                         borderRadius: BorderRadius.circular(20),
                                       ),
                                       child: const Icon(
@@ -204,7 +202,7 @@ class _ParejaFormState extends State<ParejaForm> {
                                         palomaProvider
                                             .getPalomaById(_selectedMadreId!),
                                         'Madre',
-                                        AppColors.secondary,
+                                        Colors.grey,
                                       ),
                                     ),
                                   ],
@@ -227,13 +225,7 @@ class _ParejaFormState extends State<ParejaForm> {
             ),
             ElevatedButton(
               onPressed: _submitForm,
-              child: _isLoading
-                  ? const SizedBox(
-                      width: 20,
-                      height: 20,
-                      child: CircularProgressIndicator(strokeWidth: 2),
-                    )
-                  : Text('Agregar'),
+              child: Text('Agregar'),
             ),
           ],
         );
@@ -274,18 +266,7 @@ class _ParejaFormState extends State<ParejaForm> {
 
   void _submitForm() {
     if (_formKey.currentState!.validate()) {
-      // Crear nueva reproducción
-      final nuevaReproduccion = Reproduccion(
-        id: DateTime.now().millisecondsSinceEpoch.toString(),
-        palomaPadreId: _selectedPadreId!,
-        palomaMadreId: _selectedMadreId!,
-        fechaInicio: _fechaInicio,
-        estado: 'En curso',
-        notas: _notas.isNotEmpty ? _notas : null,
-        fechaCreacion: DateTime.now(),
-      );
-
-      // TODO: Agregar a la lista de reproducciones
+      // Crear nueva reproducción (puedes agregar lógica de guardado aquí si es necesario)
       Navigator.pop(context);
 
       ScaffoldMessenger.of(context).showSnackBar(

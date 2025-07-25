@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import '../../constants/app_colors.dart';
 import '../../constants/app_text_styles.dart';
 import '../mi_palomar/mi_palomar_screen.dart';
-import '../../main.dart';
 
 class WelcomeScreen extends StatefulWidget {
   const WelcomeScreen({super.key});
@@ -30,7 +29,7 @@ class _WelcomeScreenState extends State<WelcomeScreen>
       title: 'Reproducción Inteligente',
       description: 'Controla el proceso de reproducción, registra parejas, '
           'huevos y pichones. Mantén un árbol genealógico completo.',
-      color: AppColors.secondary,
+      color: AppColors.primaryLight,
     ),
     WelcomePage(
       icon: Icons.medical_services,
@@ -79,7 +78,7 @@ class _WelcomeScreenState extends State<WelcomeScreen>
 
   void _finishWelcome() {
     Navigator.of(context).pushReplacement(
-      MaterialPageRoute(builder: (context) => const MainLayout(child: MiPalomarScreen())),
+      MaterialPageRoute(builder: (context) => const MiPalomarScreen()),
     );
   }
 
@@ -97,9 +96,9 @@ class _WelcomeScreenState extends State<WelcomeScreen>
                 child: TextButton(
                   onPressed: _finishWelcome,
                   child: Text(
-                    'Saltar',
+                    'Omitir',
                     style: AppTextStyles.labelLarge.copyWith(
-                      color: AppColors.textSecondary,
+                      color: Colors.grey,
                     ),
                   ),
                 ),
@@ -151,7 +150,7 @@ class _WelcomeScreenState extends State<WelcomeScreen>
                     child: ElevatedButton(
                       onPressed: _nextPage,
                       child: Text(
-                        _currentPage == _pages.length - 1 ? 'Comenzar' : 'Siguiente',
+                        _currentPage == _pages.length - 1 ? '¡Empezar!' : 'Siguiente',
                       ),
                     ),
                   ),
@@ -198,7 +197,7 @@ class _WelcomePageView extends StatelessWidget {
           Text(
             page.title,
             style: AppTextStyles.h2.copyWith(
-              color: AppColors.textPrimary,
+              color: Colors.black,
               fontWeight: FontWeight.bold,
             ),
             textAlign: TextAlign.center,
@@ -210,7 +209,7 @@ class _WelcomePageView extends StatelessWidget {
           Text(
             page.description,
             style: AppTextStyles.bodyLarge.copyWith(
-              color: AppColors.textSecondary,
+              color: Colors.grey,
               height: 1.5,
             ),
             textAlign: TextAlign.center,

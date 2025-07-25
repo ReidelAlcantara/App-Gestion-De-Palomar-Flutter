@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../../providers/tratamiento_provider.dart';
-import '../../providers/paloma_provider.dart';
 import '../../widgets/tratamiento_card.dart';
 import '../../widgets/tratamiento_form.dart';
 import '../../constants/app_colors.dart';
@@ -340,11 +339,6 @@ class _TratamientosScreenState extends State<TratamientosScreen>
                             child: TratamientoCard(
                               key: Key(tratamiento.id),
                               tratamiento: tratamiento,
-                              onTap: () => _showTratamientoDetails(tratamiento),
-                              onChangeStatus: (tratamiento.estaPendiente || tratamiento.estaEnProceso)
-                                  ? () => _showChangeStatusDialog(tratamiento)
-                                  : null,
-                              onDelete: () => _showDeleteConfirmDialog(tratamiento.id),
                             ),
                           ),
                         );
@@ -434,11 +428,6 @@ class _TratamientosScreenState extends State<TratamientosScreen>
                 child: TratamientoCard(
                   key: Key(tratamiento.id),
                   tratamiento: tratamiento,
-                  onTap: () => _showTratamientoDetails(tratamiento),
-                  onChangeStatus: (tratamiento.estaPendiente || tratamiento.estaEnProceso)
-                      ? () => _showChangeStatusDialog(tratamiento)
-                      : null,
-                  onDelete: () => _showDeleteConfirmDialog(tratamiento.id),
                 ),
               );
             },
@@ -498,10 +487,6 @@ class _TratamientosScreenState extends State<TratamientosScreen>
               padding: const EdgeInsets.only(bottom: 8.0),
               child: TratamientoCard(
                 tratamiento: tratamiento,
-                onTap: () => _showTratamientoDetails(tratamiento),
-                onChangeStatus: () => _showChangeStatusDialog(tratamiento),
-                onDelete: () => _showDeleteConfirmDialog(tratamiento.id),
-                isUrgent: true,
               ),
             );
           },
@@ -554,8 +539,6 @@ class _TratamientosScreenState extends State<TratamientosScreen>
               padding: const EdgeInsets.only(bottom: 8.0),
               child: TratamientoCard(
                 tratamiento: tratamiento,
-                onTap: () => _showTratamientoDetails(tratamiento),
-                onDelete: () => _showDeleteConfirmDialog(tratamiento.id),
               ),
             );
           },

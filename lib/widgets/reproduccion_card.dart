@@ -2,9 +2,7 @@ import 'package:flutter/material.dart';
 import '../models/reproduccion.dart';
 import 'package:provider/provider.dart';
 import '../providers/paloma_provider.dart';
-import '../screens/mi_palomar/paloma_profile_screen.dart';
 import 'package:collection/collection.dart';
-import '../models/paloma.dart';
 import '../providers/reproduccion_provider.dart';
 import '../widgets/reproduccion_form.dart';
 
@@ -34,21 +32,6 @@ class ReproduccionCard extends StatelessWidget {
         return Colors.grey;
       default:
         return Colors.black;
-    }
-  }
-
-  IconData _getEstadoIcon() {
-    switch (reproduccion.estado) {
-      case 'En Proceso':
-        return Icons.pending;
-      case 'Exitoso':
-        return Icons.check_circle;
-      case 'Fallido':
-        return Icons.cancel;
-      case 'Cancelado':
-        return Icons.block;
-      default:
-        return Icons.help;
     }
   }
 

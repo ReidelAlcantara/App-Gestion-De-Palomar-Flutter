@@ -7,7 +7,6 @@ import '../providers/captura_provider.dart';
 import '../providers/competencia_provider.dart';
 import '../services/export_service.dart';
 import '../constants/app_colors.dart';
-import '../constants/app_text_styles.dart';
 
 class ExportManager extends StatefulWidget {
   const ExportManager({super.key});

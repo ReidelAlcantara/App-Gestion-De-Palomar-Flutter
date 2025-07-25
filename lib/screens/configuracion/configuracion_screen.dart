@@ -15,7 +15,7 @@ import 'dart:io';
 import 'package:share_plus/share_plus.dart';
 import 'dart:math';
 import '../../services/storage_service.dart';
-import 'package:gestion_palomas/screens/configuracion/manual_usuario_screen.dart';
+import 'manual_usuario_screen.dart';
 
 class ConfiguracionScreen extends StatefulWidget {
   const ConfiguracionScreen({super.key});
@@ -210,15 +210,27 @@ class _ConfiguracionScreenState extends State<ConfiguracionScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final configuracionProvider = Provider.of<ConfiguracionProvider>(context);
-    final colores = configuracionProvider.coloresPaloma;
-    if (configuracionProvider.isLoading) {
-      return const Center(child: CircularProgressIndicator());
+    final configProvider = Provider.of<ConfiguracionProvider>(context);
+    final config = configProvider.configuracion;
+    if (configProvider.isLoading) {
+      return Scaffold(
+        appBar: AppBar(title: Text('Configuración')),
+        body: Center(child: CircularProgressIndicator()),
+      );
     }
-    if (configuracionProvider.error != null) {
-      return Center(child: Text('Error: ${configuracionProvider.error}'));
+    if (config == null) {
+      return Scaffold(
+        appBar: AppBar(title: Text('Configuración')),
+        body: Center(
+          child: Text(
+            'No se pudo cargar la configuración. Por favor, reinicie la app o contacte soporte.',
+            style: TextStyle(fontSize: 18, color: Colors.red),
+            textAlign: TextAlign.center,
+          ),
+        ),
+      );
     }
-    final config = configuracionProvider.configuracion!;
+    final colores = configProvider.coloresPaloma;
     return Scaffold(
       appBar: AppBar(
         title: Text('Configuración'),
@@ -246,197 +258,196 @@ class _ConfiguracionScreenState extends State<ConfiguracionScreen> {
                 ],
               ),
             ),
-            Expanded(
-              child: ListView(
-                padding: const EdgeInsets.all(24),
-                children: [
-                  // Información de la aplicación
-                  _buildAppInfoCard(config),
-                  const SizedBox(height: 16),
+            ListView(
+              shrinkWrap: true,
+              physics: const NeverScrollableScrollPhysics(),
+              children: [
+                // Información de la aplicación
+                _buildAppInfoCard(config),
+                const SizedBox(height: 16),
 
-                  // Configuración general
-                  _buildGeneralSettingsCard(config, configuracionProvider),
-                  const SizedBox(height: 16),
+                // Configuración general
+                _buildGeneralSettingsCard(config, configProvider),
+                const SizedBox(height: 16),
 
-                  // Configuración de apariencia
-                  _buildAppearanceSettingsCard(config, configuracionProvider),
-                  const SizedBox(height: 16),
+                // Configuración de apariencia
+                _buildAppearanceSettingsCard(config, configProvider),
+                const SizedBox(height: 16),
 
-                  // Configuración de notificaciones
-                  _buildNotificationSettingsCard(config, configuracionProvider),
-                  const SizedBox(height: 16),
+                // Configuración de notificaciones
+                _buildNotificationSettingsCard(config, configProvider),
+                const SizedBox(height: 16),
 
-                  // Configuración de backup
-                  _buildBackupSettingsCard(config, configuracionProvider),
-                  const SizedBox(height: 16),
+                // Configuración de backup
+                _buildBackupSettingsCard(config, configProvider),
+                const SizedBox(height: 16),
 
-                  // Configuración avanzada
-                  _buildAdvancedSettingsCard(config, configuracionProvider),
-                  const SizedBox(height: 16),
+                // Configuración avanzada
+                _buildAdvancedSettingsCard(config, configProvider),
+                const SizedBox(height: 16),
 
-                  // Acciones
-                  _buildActionsCard(configuracionProvider),
-                  const SizedBox(height: 16),
-                  Text('Colores sugeridos para las palomas', style: AppTextStyles.h5),
-                  const SizedBox(height: 8),
-                  ...colores.map((color) => ListTile(
-                        title: Text(color),
-                        trailing: Row(
-                          mainAxisSize: MainAxisSize.min,
-                          children: [
-                            IconButton(
-                              icon: const Icon(Icons.edit),
-                              onPressed: () async {
-                                final controller = TextEditingController(text: color);
-                                final result = await showDialog<String>(
-                                  context: context,
-                                  builder: (context) => AlertDialog(
-                                    title: Text('Editar color'),
-                                    content: TextField(
-                                      controller: controller,
-                                      decoration: InputDecoration(labelText: 'Color'),
-                                    ),
-                                    actions: [
-                                      TextButton(
-                                        onPressed: () => Navigator.pop(context),
-                                        child: Text('Cancelar'),
-                                      ),
-                                      ElevatedButton(
-                                        onPressed: () => Navigator.pop(context, controller.text.trim()),
-                                        child: Text('Guardar'),
-                                      ),
-                                    ],
-                                  ),
-                                );
-                                if (result != null && result.isNotEmpty && result != color) {
-                                  configuracionProvider.editarColorPaloma(color, result);
-                                }
-                              },
-                            ),
-                            IconButton(
-                              icon: const Icon(Icons.delete),
-                              onPressed: () => configuracionProvider.eliminarColorPaloma(color),
-                            ),
-                          ],
-                        ),
-                      )),
-                  ListTile(
-                    title: Text('Agregar nuevo color'),
-                    trailing: IconButton(
-                      icon: const Icon(Icons.add),
-                      onPressed: () async {
-                        final controller = TextEditingController();
-                        final result = await showDialog<String>(
-                          context: context,
-                          builder: (context) => AlertDialog(
-                            title: Text('Nuevo color'),
-                            content: TextField(
-                              controller: controller,
-                              decoration: InputDecoration(labelText: 'Color'),
-                            ),
-                            actions: [
-                              TextButton(
-                                onPressed: () => Navigator.pop(context),
-                                child: Text('Cancelar'),
-                              ),
-                              ElevatedButton(
-                                onPressed: () => Navigator.pop(context, controller.text.trim()),
-                                child: Text('Agregar'),
-                              ),
-                            ],
-                          ),
-                        );
-                        if (result != null && result.isNotEmpty) {
-                          configuracionProvider.agregarColorPaloma(result);
-                        }
-                      },
-                    ),
-                  ),
-                  const Divider(),
-                  Card(
-                    color: Colors.blue[50],
-                    child: Padding(
-                      padding: const EdgeInsets.all(16.0),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
+                // Acciones
+                _buildActionsCard(configProvider),
+                const SizedBox(height: 16),
+                Text('Colores sugeridos para las palomas', style: AppTextStyles.h5),
+                const SizedBox(height: 8),
+                ...colores.map((color) => ListTile(
+                      title: Text(color),
+                      trailing: Row(
+                        mainAxisSize: MainAxisSize.min,
                         children: [
-                          Text('Soporte y Comunidad', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16)),
-                          const SizedBox(height: 8),
-                          Text('Únete a los grupos oficiales'),
-                          const SizedBox(height: 12),
-                          Row(
-                            children: [
-                              ElevatedButton.icon(
-                                icon: const FaIcon(FontAwesomeIcons.whatsapp, color: Colors.white),
-                                label: Text('WhatsApp'),
-                                style: ElevatedButton.styleFrom(backgroundColor: Colors.green),
-                                onPressed: () async {
-                                  final url = 'https://chat.whatsapp.com/JgPK17jx2SMF5vYEzHXSoQ?mode=ac_t';
-                                  if (await canLaunch(url)) {
-                                    await launch(url);
-                                  } else {
-                                    ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('No se pudo abrir WhatsApp')));
-                                  }
-                                },
-                              ),
-                              const SizedBox(width: 16),
-                              ElevatedButton.icon(
-                                icon: const Icon(Icons.telegram, color: Colors.white),
-                                label: Text('Telegram'),
-                                style: ElevatedButton.styleFrom(backgroundColor: Colors.blue),
-                                onPressed: () async {
-                                  final url = 'https://t.me/+W03nrbDWXXw3NmUx';
-                                  if (await canLaunch(url)) {
-                                    await launch(url);
-                                  } else {
-                                    ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('No se pudo abrir Telegram')));
-                                  }
-                                },
-                              ),
-                            ],
+                          IconButton(
+                            icon: const Icon(Icons.edit),
+                            onPressed: () async {
+                              final controller = TextEditingController(text: color);
+                              final result = await showDialog<String>(
+                                context: context,
+                                builder: (context) => AlertDialog(
+                                  title: Text('Editar color'),
+                                  content: TextField(
+                                    controller: controller,
+                                    decoration: InputDecoration(labelText: 'Color'),
+                                  ),
+                                  actions: [
+                                    TextButton(
+                                      onPressed: () => Navigator.pop(context),
+                                      child: Text('Cancelar'),
+                                    ),
+                                    ElevatedButton(
+                                      onPressed: () => Navigator.pop(context, controller.text.trim()),
+                                      child: Text('Guardar'),
+                                    ),
+                                  ],
+                                ),
+                              );
+                              if (result != null && result.isNotEmpty && result != color) {
+                                configProvider.editarColorPaloma(color, result);
+                              }
+                            },
                           ),
-                          const SizedBox(height: 16),
-                          Row(
-                            children: [
-                              const Icon(Icons.email, color: Colors.blue),
-                              const SizedBox(width: 8),
-                              Expanded(
-                                child: SelectableText('app.gestiondepalomar@gmail.com', style: TextStyle(fontWeight: FontWeight.w500)),
-                              ),
-                              IconButton(
-                                icon: const Icon(Icons.copy, size: 18),
-                                tooltip: 'Copiar email',
-                                onPressed: () async {
-                                  await Clipboard.setData(ClipboardData(text: 'app.gestiondepalomar@gmail.com'));
-                                  ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Email copiado')));
-                                },
-                              ),
-                            ],
-                          ),
-                          const SizedBox(height: 8),
-                          Row(
-                            children: [
-                              const Icon(Icons.phone, color: Colors.green),
-                              const SizedBox(width: 8),
-                              Expanded(
-                                child: SelectableText('+53 53285642', style: TextStyle(fontWeight: FontWeight.w500)),
-                              ),
-                              IconButton(
-                                icon: const Icon(Icons.copy, size: 18),
-                                tooltip: 'Copiar número',
-                                onPressed: () async {
-                                  await Clipboard.setData(ClipboardData(text: '+53 53285642'));
-                                  ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Número copiado')));
-                                },
-                              ),
-                            ],
+                          IconButton(
+                            icon: const Icon(Icons.delete),
+                            onPressed: () => configProvider.eliminarColorPaloma(color),
                           ),
                         ],
                       ),
+                    )),
+                ListTile(
+                  title: Text('Agregar nuevo color'),
+                  trailing: IconButton(
+                    icon: const Icon(Icons.add),
+                    onPressed: () async {
+                      final controller = TextEditingController();
+                      final result = await showDialog<String>(
+                        context: context,
+                        builder: (context) => AlertDialog(
+                          title: Text('Nuevo color'),
+                          content: TextField(
+                            controller: controller,
+                            decoration: InputDecoration(labelText: 'Color'),
+                          ),
+                          actions: [
+                            TextButton(
+                              onPressed: () => Navigator.pop(context),
+                              child: Text('Cancelar'),
+                            ),
+                            ElevatedButton(
+                              onPressed: () => Navigator.pop(context, controller.text.trim()),
+                              child: Text('Agregar'),
+                            ),
+                          ],
+                        ),
+                      );
+                      if (result != null && result.isNotEmpty) {
+                        configProvider.agregarColorPaloma(result);
+                      }
+                    },
+                  ),
+                ),
+                const Divider(),
+                Card(
+                  color: Colors.blue[50],
+                  child: Padding(
+                    padding: const EdgeInsets.all(16.0),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text('Soporte y Comunidad', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16)),
+                        const SizedBox(height: 8),
+                        Text('Únete a los grupos oficiales'),
+                        const SizedBox(height: 12),
+                        Row(
+                          children: [
+                            ElevatedButton.icon(
+                              icon: const FaIcon(FontAwesomeIcons.whatsapp, color: Colors.white),
+                              label: Text('WhatsApp'),
+                              style: ElevatedButton.styleFrom(backgroundColor: Colors.green),
+                              onPressed: () async {
+                                final url = 'https://chat.whatsapp.com/JgPK17jx2SMF5vYEzHXSoQ?mode=ac_t';
+                                if (await canLaunch(url)) {
+                                  await launch(url);
+                                } else {
+                                  ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('No se pudo abrir WhatsApp')));
+                                }
+                              },
+                            ),
+                            const SizedBox(width: 16),
+                            ElevatedButton.icon(
+                              icon: const Icon(Icons.telegram, color: Colors.white),
+                              label: Text('Telegram'),
+                              style: ElevatedButton.styleFrom(backgroundColor: Colors.blue),
+                              onPressed: () async {
+                                final url = 'https://t.me/+W03nrbDWXXw3NmUx';
+                                if (await canLaunch(url)) {
+                                  await launch(url);
+                                } else {
+                                  ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('No se pudo abrir Telegram')));
+                                }
+                              },
+                            ),
+                          ],
+                        ),
+                        const SizedBox(height: 16),
+                        Row(
+                          children: [
+                            const Icon(Icons.email, color: Colors.blue),
+                            const SizedBox(width: 8),
+                            Expanded(
+                              child: SelectableText('app.gestiondepalomar@gmail.com', style: TextStyle(fontWeight: FontWeight.w500)),
+                            ),
+                            IconButton(
+                              icon: const Icon(Icons.copy, size: 18),
+                              tooltip: 'Copiar email',
+                              onPressed: () async {
+                                await Clipboard.setData(ClipboardData(text: 'app.gestiondepalomar@gmail.com'));
+                                ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Email copiado')));
+                              },
+                            ),
+                          ],
+                        ),
+                        const SizedBox(height: 8),
+                        Row(
+                          children: [
+                            const Icon(Icons.phone, color: Colors.green),
+                            const SizedBox(width: 8),
+                            Expanded(
+                              child: SelectableText('+53 53285642', style: TextStyle(fontWeight: FontWeight.w500)),
+                            ),
+                            IconButton(
+                              icon: const Icon(Icons.copy, size: 18),
+                              tooltip: 'Copiar número',
+                              onPressed: () async {
+                                await Clipboard.setData(ClipboardData(text: '+53 53285642'));
+                                ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Número copiado')));
+                              },
+                            ),
+                          ],
+                        ),
+                      ],
                     ),
                   ),
-                ],
-              ),
+                ),
+              ],
             ),
           ],
         ),
@@ -491,7 +502,7 @@ class _ConfiguracionScreenState extends State<ConfiguracionScreen> {
             const SizedBox(height: 16),
             _buildInfoRow('Idioma', config.nombreIdioma, Icons.language),
             _buildInfoRow('Tema', config.tema, Icons.brightness_auto),
-            _buildInfoRow('Moneda', config.nombreMoneda, Icons.attach_money),
+            _buildInfoRow('Moneda', _getNombreMonedaCompleto(config.moneda), Icons.attach_money),
             _buildInfoRow('Formato de fecha', config.formatoFechaLegible,
                 Icons.calendar_today),
           ],
@@ -528,12 +539,11 @@ class _ConfiguracionScreenState extends State<ConfiguracionScreen> {
             _buildDropdownSetting(
               'Moneda',
               config.moneda,
-              ['USD', 'EUR', 'MXN', 'COP'],
+              ['CUP', 'USD', 'MLC'],
               [
-                'Dólar estadounidense',
-                'Euro',
-                'Peso mexicano',
-                'Peso colombiano'
+                'CUP (Peso Cubano)',
+                'USD (Dólar estadounidense)',
+                'MLC (Moneda Libremente Convertible)'
               ],
               Icons.attach_money,
               (value) => provider.updateMoneda(value),
@@ -855,7 +865,7 @@ class _ConfiguracionScreenState extends State<ConfiguracionScreen> {
                 ),
                 StatefulBuilder(
                   builder: (context, setStateSB) {
-                    int interval = config.backupReminderDays ?? 7;
+                    int interval = 7; // Valor por defecto
                     return Row(
                       children: [
                         IconButton(
@@ -864,7 +874,6 @@ class _ConfiguracionScreenState extends State<ConfiguracionScreen> {
                               ? () {
                                   setStateSB(() {
                                     interval--;
-                                    provider.updateBackupReminderDays(interval);
                                   });
                                 }
                               : null,
@@ -876,7 +885,6 @@ class _ConfiguracionScreenState extends State<ConfiguracionScreen> {
                               ? () {
                                   setStateSB(() {
                                     interval++;
-                                    provider.updateBackupReminderDays(interval);
                                   });
                                 }
                               : null,
@@ -1383,5 +1391,18 @@ class _ConfiguracionScreenState extends State<ConfiguracionScreen> {
         ],
       ),
     );
+  }
+}
+
+String _getNombreMonedaCompleto(String moneda) {
+  switch (moneda) {
+    case 'CUP':
+      return 'CUP (Peso Cubano)';
+    case 'USD':
+      return 'USD (Dólar estadounidense)';
+    case 'MLC':
+      return 'MLC (Moneda Libremente Convertible)';
+    default:
+      return moneda;
   }
 }

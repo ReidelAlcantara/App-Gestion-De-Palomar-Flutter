@@ -1,6 +1,5 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:gestion_palomar/providers/licencia_provider.dart';
-import 'package:gestion_palomar/models/licencia.dart';
 import 'package:gestion_palomar/services/storage_service.dart';
 import 'package:mocktail/mocktail.dart';
 

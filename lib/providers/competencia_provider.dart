@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/foundation.dart';
 import '../models/competencia.dart';
 import '../services/storage_service.dart';
 import 'package:provider/provider.dart';
@@ -48,7 +47,7 @@ class CompetenciaProvider extends BaseProvider {
         // Cargar datos de ejemplo si no hay datos
         await _loadExampleData();
       } else {
-        _competencias = data.map((json) => Competencia.fromJson(json)).toList();
+        _competencias = data.map((json) => Competencia.fromJson(Map<String, dynamic>.from(json))).toList();
       }
 
       setLoading(false);

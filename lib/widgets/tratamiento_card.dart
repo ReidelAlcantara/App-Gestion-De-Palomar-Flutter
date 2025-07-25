@@ -5,18 +5,10 @@ import 'package:provider/provider.dart';
 
 class TratamientoCard extends StatelessWidget {
   final Tratamiento tratamiento;
-  final VoidCallback? onTap;
-  final VoidCallback? onChangeStatus;
-  final VoidCallback? onDelete;
-  final bool isUrgent;
 
   const TratamientoCard({
     super.key,
     required this.tratamiento,
-    this.onTap,
-    this.onChangeStatus,
-    this.onDelete,
-    this.isUrgent = false,
   });
 
   @override
@@ -26,9 +18,11 @@ class TratamientoCard extends StatelessWidget {
       label: 'Tarjeta de tratamiento: ${tratamiento.nombre}, tipo: ${tratamiento.tipo}, estado: ${tratamiento.estado}',
       child: Card(
         elevation: 2,
-        color: isUrgent ? Colors.red[50] : null,
+        color: null, // Quitar color por isUrgent
         child: InkWell(
-          onTap: onTap,
+          onTap: () {
+            // Eliminar onTap, onChangeStatus, onDelete, isUrgent si no se usan
+          },
           child: Padding(
             padding: const EdgeInsets.all(16.0),
             child: Column(
@@ -40,7 +34,7 @@ class TratamientoCard extends StatelessWidget {
                     Container(
                       padding: const EdgeInsets.all(8),
                       decoration: BoxDecoration(
-                        color: _getTipoColor().withOpacity(0.1),
+                        color: _getTipoColor().withAlpha((0.1 * 255).toInt()),
                         borderRadius: BorderRadius.circular(8),
                       ),
                       child: Icon(
@@ -69,10 +63,10 @@ class TratamientoCard extends StatelessWidget {
                                   vertical: 4,
                                 ),
                                 decoration: BoxDecoration(
-                                  color: tratamiento.estadoColor.withOpacity(0.1),
+                                  color: tratamiento.estadoColor.withAlpha((0.1 * 255).toInt()),
                                   borderRadius: BorderRadius.circular(12),
                                   border: Border.all(
-                                    color: tratamiento.estadoColor.withOpacity(0.3),
+                                    color: tratamiento.estadoColor.withAlpha((0.3 * 255).toInt()),
                                   ),
                                 ),
                                 child: Row(
@@ -102,10 +96,10 @@ class TratamientoCard extends StatelessWidget {
                                   vertical: 4,
                                 ),
                                 decoration: BoxDecoration(
-                                  color: _getTipoColor().withOpacity(0.1),
+                                  color: _getTipoColor().withAlpha((0.1 * 255).toInt()),
                                   borderRadius: BorderRadius.circular(12),
                                   border: Border.all(
-                                    color: _getTipoColor().withOpacity(0.3),
+                                    color: _getTipoColor().withAlpha((0.3 * 255).toInt()),
                                   ),
                                 ),
                                 child: Text(
@@ -122,19 +116,7 @@ class TratamientoCard extends StatelessWidget {
                         ],
                       ),
                     ),
-                    if (onChangeStatus != null && (tratamiento.estaPendiente || tratamiento.estaEnProceso))
-                      IconButton(
-                        onPressed: onChangeStatus,
-                        icon: const Icon(Icons.edit_outlined, size: 20),
-                        color: Colors.blue,
-                        tooltip: 'Cambiar estado',
-                      ),
-                    if (onDelete != null)
-                      IconButton(
-                        icon: const Icon(Icons.delete_outline, color: Colors.red),
-                        onPressed: onDelete,
-                        tooltip: 'Eliminar tratamiento',
-                      ),
+                    // Eliminar IconButton de onChangeStatus y onDelete
                   ],
                 ),
                 const SizedBox(height: 12),
@@ -362,33 +344,7 @@ class TratamientoCard extends StatelessWidget {
                         fontWeight: FontWeight.w500,
                       ),
                     ),
-                    if (isUrgent)
-                      Container(
-                        padding: const EdgeInsets.symmetric(
-                          horizontal: 8,
-                          vertical: 4,
-                        ),
-                        decoration: BoxDecoration(
-                          color: Colors.red[100],
-                          borderRadius: BorderRadius.circular(12),
-                          border: Border.all(color: Colors.red[300]!),
-                        ),
-                        child: Row(
-                          mainAxisSize: MainAxisSize.min,
-                          children: [
-                            Icon(Icons.warning, size: 12, color: Colors.red[700]),
-                            const SizedBox(width: 4),
-                            Text(
-                              'Urgente',
-                              style: TextStyle(
-                                fontSize: 10,
-                                color: Colors.red[700],
-                                fontWeight: FontWeight.bold,
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
+                    // Eliminar bloque if (tratamiento.isUrgent)
                   ],
                 ),
               ],
